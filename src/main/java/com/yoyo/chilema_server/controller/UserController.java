@@ -21,7 +21,7 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/create")
-    public R add (String info , HttpServletRequest httpServletRequest) {
+    public R create(String info , HttpServletRequest httpServletRequest) {
         if (!httpServletRequest.getHeader("Created").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
         if (info==null){return R.error("404 NOTFOUND:(");}
 
@@ -38,6 +38,20 @@ public class UserController {
     }
 
 
+    @CrossOrigin
+    @PostMapping("/login")
+    public R login(String info,HttpServletRequest httpServletRequest)
+    {
+        if (!httpServletRequest.getHeader("Created").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
+        if (info==null){return R.error("404 NOTFOUND:(");}
+        byte[] base64decodedBytes = Base64.getDecoder().decode(info);
+        JSONObject jsonObj = JSONObject.parseObject(new String(base64decodedBytes));
+        System.out.println(jsonObj);
+        UserAccount userAccount = new UserAccount();
+        userAccount.setUsername(jsonObj.getString("username"));
+        userAccount.setPassword(jsonObj.getString("password"));
+        return userAccountService.login(userAccount);
+    }
 
 
 

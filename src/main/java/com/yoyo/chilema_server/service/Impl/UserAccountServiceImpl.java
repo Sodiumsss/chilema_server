@@ -1,5 +1,6 @@
 package com.yoyo.chilema_server.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.mapper.UserAccountMapper;
 import com.yoyo.chilema_server.pojo.UserAccount;
@@ -54,5 +55,20 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public R selectUserAccountById(int id) {
         return R.success("查询成功！",userAccountMapper.selectById(id));
+    }
+
+    @Override
+    public R login(UserAccount received) {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",received.getUsername());
+        UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+        System.out.println(received);
+        System.out.println(saved);
+        if (received.getPassword().equals(saved.getPassword()))
+        {
+            return  R.success("登录成功！");
+        }
+
+        return  R.success("登录失败！");
     }
 }
