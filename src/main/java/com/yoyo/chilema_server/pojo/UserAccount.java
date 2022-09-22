@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAccount {
+public class
+UserAccount {
     private int id;
     private String username;
     private String password;

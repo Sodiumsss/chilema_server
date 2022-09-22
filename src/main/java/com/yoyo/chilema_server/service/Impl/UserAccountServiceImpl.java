@@ -22,37 +22,37 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public R addUserAccount(UserAccount userAccount) {
         if(userAccountMapper.insert(userAccount) > 0) {
-            return  R.success("注册成功");
+            return  R.success("注册成功！");
         } else {
-            return  R.error("注册失败");
+            return  R.error("注册失败！");
         }
     }
 
     @Override
     public R deleteUserAccount(int id) {
         if(userAccountMapper.deleteById(id) > 0) {
-            return  R.success("删除成功");
+            return  R.success("删除成功！");
         } else {
-            return  R.error("删除失败");
+            return  R.error("删除失败！");
         }
     }
 
     @Override
     public R updateUserAccount(UserAccount userAccount) {
         if(userAccountMapper.updateById(userAccount) > 0) {
-            return  R.success("更新成功");
+            return  R.success("更新成功！");
         } else {
-            return  R.error("更新失败");
+            return  R.error("更新失败！");
         }
     }
 
     @Override
     public R selectAllUserAccount() {
-        return R.success("查询成功",userAccountMapper.selectList(null));
+        return R.success("查询成功！",userAccountMapper.selectList(null));
     }
 
     @Override
     public R selectUserAccountById(int id) {
-        return R.success("查询成功",userAccountMapper.selectById(id));
+        return R.success("查询成功！",userAccountMapper.selectById(id));
     }
 }
