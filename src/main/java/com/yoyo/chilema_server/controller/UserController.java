@@ -20,38 +20,69 @@ public class UserController {
 
 
     @CrossOrigin
-    @PostMapping("/create")
+    @PostMapping("/api/user/create")
     public R create(String info , HttpServletRequest httpServletRequest) {
-        if (!httpServletRequest.getHeader("Created").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
+        if (!httpServletRequest.getHeader("Create").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
         if (info==null){return R.error("404 NOTFOUND:(");}
 
         byte[] base64decodedBytes = Base64.getDecoder().decode(info);
         JSONObject jsonObj = JSONObject.parseObject(new String(base64decodedBytes));
-        System.out.println(jsonObj);
+//        System.out.println(jsonObj);
         UserAccount userAccount = new UserAccount();
         userAccount.setUsername(jsonObj.getString("username"));
         userAccount.setPassword(jsonObj.getString("password"));
         userAccount.setSchoolId(jsonObj.getInteger("schoolId"));
         userAccount.setBirthYear(jsonObj.getInteger("birthYear"));
-        System.out.println(userAccount);
+//        System.out.println(userAccount);
         return userAccountService.addUserAccount(userAccount);
     }
 
 
     @CrossOrigin
-    @PostMapping("/login")
+    @PostMapping("/api/user/login")
     public R login(String info,HttpServletRequest httpServletRequest)
     {
-        if (!httpServletRequest.getHeader("Created").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
-        if (info==null){return R.error("404 NOTFOUND:(");}
+        if (!httpServletRequest.getHeader("Login").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
+        if (info==null){return R.error("404 NOTFOUND:)");}
         byte[] base64decodedBytes = Base64.getDecoder().decode(info);
         JSONObject jsonObj = JSONObject.parseObject(new String(base64decodedBytes));
-        System.out.println(jsonObj);
         UserAccount userAccount = new UserAccount();
         userAccount.setUsername(jsonObj.getString("username"));
         userAccount.setPassword(jsonObj.getString("password"));
         return userAccountService.login(userAccount);
     }
+    @CrossOrigin
+    @PostMapping("/api/user/forgetPW")
+    public R forgetPW(String info,HttpServletRequest httpServletRequest)
+    {
+        if (!httpServletRequest.getHeader("forgetPW").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
+        if (info==null){return R.error("404 NOTFOUND:)");}
+
+        byte[] base64decodedBytes = Base64.getDecoder().decode(info);
+        JSONObject jsonObj = JSONObject.parseObject(new String(base64decodedBytes));
+        String username=jsonObj.getString("username");
+        UserAccount account =userAccountService.selectUserAccountByUsername(username);
+        if (account==null)
+        {
+            return R.error("填写错误！");
+        }
+//        System.out.println(account);
+
+        Integer schoolId=jsonObj.getInteger("schoolId");
+        Integer birthYear=jsonObj.getInteger("birthYear");
+        String password=jsonObj.getString("password");
+
+        if (schoolId.equals(account.getSchoolId()) && birthYear.equals(account.getBirthYear()))
+        {
+            account.setPassword(password);
+//            System.out.println(account);
+            return userAccountService.updateUserAccount(account);
+        }
+
+
+        return R.error("填写错误！");
+    }
+
 
 
 

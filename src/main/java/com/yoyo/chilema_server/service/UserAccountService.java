@@ -13,4 +13,8 @@ public interface UserAccountService {
     R login(UserAccount received);
 
 
+    UserAccount selectUserAccountByUsername(String username);
+
+
+
 }

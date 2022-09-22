@@ -57,18 +57,37 @@ public class UserAccountServiceImpl implements UserAccountService {
         return R.success("查询成功！",userAccountMapper.selectById(id));
     }
 
+
+
+
     @Override
     public R login(UserAccount received) {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",received.getUsername());
-        UserAccount saved = userAccountMapper.selectOne(queryWrapper);
-        System.out.println(received);
-        System.out.println(saved);
-        if (received.getPassword().equals(saved.getPassword()))
+
+        try {
+            UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+
+            if (received.getPassword().equals(saved.getPassword()))
+            {
+                return  R.success("登录成功！");
+            }
+        }catch (Exception e)
         {
-            return  R.success("登录成功！");
+            return R.error("登录失败！");
         }
 
-        return  R.success("登录失败！");
+        return  R.error("登录失败！");
+    }
+
+    @Override
+    public UserAccount selectUserAccountByUsername(String username) {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        try {
+            return userAccountMapper.selectOne(queryWrapper);
+        }catch (Exception ignored){
+        }
+        return null;
     }
 }
