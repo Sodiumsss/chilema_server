@@ -105,6 +105,13 @@ public class UserController {
         return R.error("填写错误！");
     }
 
+    @CrossOrigin
+    @PostMapping("/api/user/getNickname")
+    public R getNickname(String info)
+    {
+        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
+        return userAccountService.getUserNickname(userAccount);
+    }
 
 
     private boolean testConnection(String info,String key,String value,HttpServletRequest httpServletRequest)

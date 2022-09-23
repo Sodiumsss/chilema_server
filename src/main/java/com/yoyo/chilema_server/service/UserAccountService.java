@@ -17,4 +17,6 @@ public interface UserAccountService {
     R deleteUserAccountByUN(String username);
 
 
+    R getUserNickname(UserAccount userAccount);
+
 }

@@ -3,7 +3,6 @@ package com.yoyo.chilema_server.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.mapper.UserAccountMapper;
-import com.yoyo.chilema_server.pojo.Favor;
 import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +57,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         return R.success("查询成功！",userAccountMapper.selectById(id));
     }
 
-
-
-
     @Override
     public R login(UserAccount received) {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
@@ -78,7 +74,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             }
         }catch (Exception e)
         {
-            e.printStackTrace();
+            //e.printStackTrace();
             return R.error("登录失败！");
         }
 
@@ -106,4 +102,20 @@ public class UserAccountServiceImpl implements UserAccountService {
             return R.error("删除失败");
         }
     }
+
+    @Override
+    public R getUserNickname(UserAccount userAccount) {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",userAccount.getUsername());
+        queryWrapper.eq("password",userAccount.getPassword());
+        UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+        if (saved==null)
+        {
+            return R.error("你的Cookies似乎有些问题，请重新登录！");
+        }
+
+        return R.success(saved.getNickname());
+    }
+
+
 }
