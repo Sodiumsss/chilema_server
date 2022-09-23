@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONObject;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.pojo.Favor;
 import com.yoyo.chilema_server.pojo.UserAccount;
-import com.yoyo.chilema_server.pojo.UserRequestBody;
 import com.yoyo.chilema_server.service.FavorService;
 import com.yoyo.chilema_server.service.UserAccountService;
 import com.yoyo.chilema_server.utils.JsonUtils;

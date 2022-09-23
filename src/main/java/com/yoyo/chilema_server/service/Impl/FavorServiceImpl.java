@@ -31,21 +31,29 @@ public class FavorServiceImpl implements FavorService {
 
     @Override
     public R deleteFavor(int id) {
-        return null;
+        if(favorMapper.deleteById(id) > 0) {
+            return R.success("删除成功");
+        } else {
+            return R.error("删除失败");
+        }
     }
 
     @Override
     public R updateFavor(Favor favor) {
-        return null;
+        if(favorMapper.updateById(favor) > 0) {
+            return R.success("更新成功");
+        } else {
+            return R.error("更新失败");
+        }
     }
 
     @Override
     public R selectFavor() {
-        return null;
+        return R.success("查询成功",favorMapper.selectList(null));
     }
 
     @Override
     public R selectFavorById(int id) {
-        return null;
+        return R.success("查询成功",favorMapper.selectById(id));
     }
 }
