@@ -65,8 +65,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",received.getUsername());
 
+
         try {
             UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+            System.out.println(saved);
+            System.out.println(received);
 
             if (received.getPassword().equals(saved.getPassword()))
             {
@@ -74,6 +77,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             }
         }catch (Exception e)
         {
+            e.printStackTrace();
             return R.error("登录失败！");
         }
 
