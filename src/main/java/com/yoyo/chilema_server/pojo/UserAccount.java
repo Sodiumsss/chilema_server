@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class
 UserAccount {
-    private Integer id;
+    private int id;
     private String username;
     private String password;
     private Integer schoolId;
