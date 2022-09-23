@@ -3,8 +3,10 @@ package com.yoyo.chilema_server.controller;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.yoyo.chilema_server.common.R;
+import com.yoyo.chilema_server.pojo.Favor;
 import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.pojo.UserRequestBody;
+import com.yoyo.chilema_server.service.FavorService;
 import com.yoyo.chilema_server.service.UserAccountService;
 import com.yoyo.chilema_server.utils.JsonUtils;
 import com.yoyo.chilema_server.utils.RequestDataUtils;
@@ -22,6 +24,8 @@ public class UserController {
     @Autowired
     private UserAccountService userAccountService;
 
+    @Autowired
+    private FavorService favorService;
 
     @PostMapping("/api/user/create")
     @CrossOrigin
@@ -29,7 +33,19 @@ public class UserController {
         String requestInfo = RequestDataUtils.decodeBase64Info(info);
         JSONObject obj = (JSONObject) JsonUtils.getJsonObj(requestInfo, "UserAccount");
         UserAccount userAccount = JSONObject.parseObject(String.valueOf(obj), UserAccount.class);
-        return userAccountService.addUserAccount(userAccount);
+        JSONObject obj2 = (JSONObject) JsonUtils.getJsonObj(requestInfo, "Favor");
+        System.out.println(obj2);
+        Object username = obj.get("username");
+        Object step1 = obj2.get("step1");
+        Object step2 = obj2.get("step2");
+        Object step3 = obj2.get("step3");
+        Object step4 = obj2.get("step4");
+        Favor favor = new Favor(0 , username.toString(), step1.toString(), step2.toString(), step3.toString(), step4.toString());
+        if(userAccountService.addUserAccount(userAccount).getCode()+favorService.addFavor(favor).getCode() == 2) {
+            return R.success("注册成功");
+        } else {
+            return R.error("注册失败");
+        }
     }
 
     @PostMapping("/api/user/delete")
