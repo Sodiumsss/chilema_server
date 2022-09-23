@@ -17,4 +17,7 @@ public class RequestDataUtils {
         return JSONObject.parseObject(new String(decodeBase64Info),tClass);
     }
 
+    public static String decodeBase64Info(String info) {
+        return new String(Base64.getDecoder().decode(info));
+    }
 }

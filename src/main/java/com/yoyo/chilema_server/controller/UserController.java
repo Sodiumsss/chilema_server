@@ -1,9 +1,13 @@
 package com.yoyo.chilema_server.controller;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.pojo.UserAccount;
+import com.yoyo.chilema_server.pojo.UserRequestBody;
 import com.yoyo.chilema_server.service.UserAccountService;
+import com.yoyo.chilema_server.utils.JsonUtils;
+import com.yoyo.chilema_server.utils.RequestDataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,24 +23,20 @@ public class UserController {
     private UserAccountService userAccountService;
 
 
-    @CrossOrigin
     @PostMapping("/api/user/create")
-    public R create(String info , HttpServletRequest httpServletRequest) {
-        if (!httpServletRequest.getHeader("Create").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
-        if (info==null){return R.error("404 NOTFOUND:(");}
-
-        byte[] base64decodedBytes = Base64.getDecoder().decode(info);
-        JSONObject jsonObj = JSONObject.parseObject(new String(base64decodedBytes));
-//        System.out.println(jsonObj);
-        UserAccount userAccount = new UserAccount();
-        userAccount.setUsername(jsonObj.getString("username"));
-        userAccount.setPassword(jsonObj.getString("password"));
-        userAccount.setSchoolId(jsonObj.getInteger("schoolId"));
-        userAccount.setBirthYear(jsonObj.getInteger("birthYear"));
-//        System.out.println(userAccount);
+    @CrossOrigin
+    public R addUser(String info, HttpServletRequest request) {
+        String requestInfo = RequestDataUtils.decodeBase64Info(info);
+        JSONObject obj = (JSONObject) JsonUtils.getJsonObj(requestInfo, "UserAccount");
+        UserAccount userAccount = JSONObject.parseObject(String.valueOf(obj), UserAccount.class);
         return userAccountService.addUserAccount(userAccount);
     }
 
+    @PostMapping("/api/user/delete")
+    @CrossOrigin
+    public R deleteUser(Integer id) {
+        return userAccountService.deleteUserAccount(id);
+    }
 
     @CrossOrigin
     @PostMapping("/api/user/login")
@@ -44,11 +44,7 @@ public class UserController {
     {
         if (!httpServletRequest.getHeader("Login").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
         if (info==null){return R.error("404 NOTFOUND:)");}
-        byte[] base64decodedBytes = Base64.getDecoder().decode(info);
-        JSONObject jsonObj = JSONObject.parseObject(new String(base64decodedBytes));
-        UserAccount userAccount = new UserAccount();
-        userAccount.setUsername(jsonObj.getString("username"));
-        userAccount.setPassword(jsonObj.getString("password"));
+        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
         return userAccountService.login(userAccount);
     }
     @CrossOrigin
