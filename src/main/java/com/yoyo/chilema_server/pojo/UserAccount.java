@@ -14,10 +14,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAccount {
-    private int id;
+public class
+UserAccount {
+    private Integer id;
     private String username;
     private String password;
-    private int schoolId;
-    private int birthYear;
+    private Integer schoolId;
+    private Integer birthYear;
 }

@@ -9,4 +9,12 @@ public interface UserAccountService {
     R updateUserAccount(UserAccount userAccount);
     R selectAllUserAccount();
     R selectUserAccountById(int id);
+
+    R login(UserAccount received);
+
+
+    UserAccount selectUserAccountByUsername(String username);
+
+
+
 }

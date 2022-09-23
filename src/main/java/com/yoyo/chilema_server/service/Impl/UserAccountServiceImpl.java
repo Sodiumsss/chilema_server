@@ -1,5 +1,6 @@
 package com.yoyo.chilema_server.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.mapper.UserAccountMapper;
 import com.yoyo.chilema_server.pojo.UserAccount;
@@ -22,37 +23,71 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public R addUserAccount(UserAccount userAccount) {
         if(userAccountMapper.insert(userAccount) > 0) {
-            return  R.success("注册成功");
+            return  R.success("注册成功！");
         } else {
-            return  R.error("注册失败");
+            return  R.error("注册失败！");
         }
     }
 
     @Override
     public R deleteUserAccount(int id) {
         if(userAccountMapper.deleteById(id) > 0) {
-            return  R.success("删除成功");
+            return  R.success("删除成功！");
         } else {
-            return  R.error("删除失败");
+            return  R.error("删除失败！");
         }
     }
 
     @Override
     public R updateUserAccount(UserAccount userAccount) {
         if(userAccountMapper.updateById(userAccount) > 0) {
-            return  R.success("更新成功");
+            return  R.success("更新成功！");
         } else {
-            return  R.error("更新失败");
+            return  R.error("更新失败！");
         }
     }
 
     @Override
     public R selectAllUserAccount() {
-        return R.success("查询成功",userAccountMapper.selectList(null));
+        return R.success("查询成功！",userAccountMapper.selectList(null));
     }
 
     @Override
     public R selectUserAccountById(int id) {
-        return R.success("查询成功",userAccountMapper.selectById(id));
+        return R.success("查询成功！",userAccountMapper.selectById(id));
+    }
+
+
+
+
+    @Override
+    public R login(UserAccount received) {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",received.getUsername());
+
+        try {
+            UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+
+            if (received.getPassword().equals(saved.getPassword()))
+            {
+                return  R.success("登录成功！");
+            }
+        }catch (Exception e)
+        {
+            return R.error("登录失败！");
+        }
+
+        return  R.error("登录失败！");
+    }
+
+    @Override
+    public UserAccount selectUserAccountByUsername(String username) {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        try {
+            return userAccountMapper.selectOne(queryWrapper);
+        }catch (Exception ignored){
+        }
+        return null;
     }
 }
