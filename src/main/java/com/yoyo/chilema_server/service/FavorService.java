@@ -11,4 +11,6 @@ public interface FavorService {
     R updateFavor(Favor favor);
     R selectFavor();
     R selectFavorById(int id);
+
+    R deleteFavorByUN(String username);
 }

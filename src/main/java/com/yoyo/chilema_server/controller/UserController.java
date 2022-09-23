@@ -1,5 +1,6 @@
 package com.yoyo.chilema_server.controller;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.pojo.Favor;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Base64;
 
 @RestController
 public class UserController {
@@ -26,7 +28,7 @@ public class UserController {
 
     @PostMapping("/api/user/create")
     @CrossOrigin
-    public R create(String info) {
+    public R addUser(String info, HttpServletRequest request) {
         String requestInfo = RequestDataUtils.decodeBase64Info(info);
         JSONObject obj = (JSONObject) JsonUtils.getJsonObj(requestInfo, "UserAccount");
         UserAccount userAccount = JSONObject.parseObject(String.valueOf(obj), UserAccount.class);
@@ -48,8 +50,26 @@ public class UserController {
 
     @PostMapping("/api/user/delete")
     @CrossOrigin
-    public R deleteUser(Integer id) {
-        return userAccountService.deleteUserAccount(id);
+    public R deleteUser(String username) {
+        if(userAccountService.deleteUserAccountByUN(username).getCode()+favorService.deleteFavorByUN(username).getCode() == 2) {
+            return R.success("删除成功");
+        } else {
+            return R.error("删除失败");
+        }
+    }
+
+    @PostMapping("/api/favor/update")
+    @CrossOrigin
+    public R updateFavor(String info,HttpServletRequest request) {
+        Favor favor = RequestDataUtils.decodeInfo(info, Favor.class);
+        return favorService.updateFavor(favor);
+    }
+
+    @PostMapping("/api/user/update")
+    @CrossOrigin
+    public R updateUser(String info,HttpServletRequest request) {
+        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
+        return userAccountService.updateUserAccount(userAccount);
     }
 
     @CrossOrigin
@@ -59,6 +79,8 @@ public class UserController {
         UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
         return userAccountService.login(userAccount);
     }
+
+
     @CrossOrigin
     @PostMapping("/api/user/forgetPW")
     public R forgetPW(String info)
@@ -86,20 +108,12 @@ public class UserController {
 
 
 
-
     private boolean testConnection(String info,String key,String value,HttpServletRequest httpServletRequest)
     {
         if (!httpServletRequest.getHeader(key).equals(value)){return false;}
         return info != null;
     }
 
-    @CrossOrigin
-    @PostMapping("/api/user/test")
-    public void test()
-    {
-
-
-    }
 
 
 }

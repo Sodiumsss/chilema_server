@@ -3,6 +3,7 @@ package com.yoyo.chilema_server.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.mapper.UserAccountMapper;
+import com.yoyo.chilema_server.pojo.Favor;
 import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +94,16 @@ public class UserAccountServiceImpl implements UserAccountService {
         }catch (Exception ignored){
         }
         return null;
+    }
+
+    @Override
+    public R deleteUserAccountByUN(String username) {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        if(userAccountMapper.delete(queryWrapper) > 0) {
+            return R.success("删除成功");
+        } else {
+            return R.error("删除失败");
+        }
     }
 }
