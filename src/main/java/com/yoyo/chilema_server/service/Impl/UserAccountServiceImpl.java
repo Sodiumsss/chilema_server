@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
     @Autowired
-    UserAccountMapper userAccountMapper;
+    private UserAccountMapper userAccountMapper;
 
     @Override
     public R addUserAccount(UserAccount userAccount) {
