@@ -26,18 +26,19 @@ public class UserController {
 
     @PostMapping("/api/user/create")
     @CrossOrigin
-    public R addUser(String info) {
+    public R create(String info) {
         String requestInfo = RequestDataUtils.decodeBase64Info(info);
         JSONObject obj = (JSONObject) JsonUtils.getJsonObj(requestInfo, "UserAccount");
         UserAccount userAccount = JSONObject.parseObject(String.valueOf(obj), UserAccount.class);
         JSONObject obj2 = (JSONObject) JsonUtils.getJsonObj(requestInfo, "Favor");
         System.out.println(obj2);
-        Object username = obj.get("username");
-        Object step1 = obj2.get("step1");
-        Object step2 = obj2.get("step2");
-        Object step3 = obj2.get("step3");
-        Object step4 = obj2.get("step4");
-        Favor favor = new Favor(0 , username.toString(), step1.toString(), step2.toString(), step3.toString(), step4.toString());
+        Favor favor = new Favor(
+                0,
+                userAccount.getUsername(),
+                obj2.get("step1").toString(),
+                obj2.get("step2").toString(),
+                obj2.get("step3").toString(),
+                obj2.get("step4").toString());
         if(userAccountService.addUserAccount(userAccount).getCode()+favorService.addFavor(favor).getCode() == 2) {
             return R.success("注册成功");
         } else {
@@ -66,8 +67,6 @@ public class UserController {
 
         UserAccount SAccount =userAccountService.selectUserAccountByUsername(RAccount.getUsername());
 
-        System.out.println(RAccount);
-        System.out.println(SAccount);
         if (SAccount==null)
         {
             return R.error("填写错误！");
@@ -78,7 +77,6 @@ public class UserController {
             if(RAccount.getBirthYear().equals(SAccount.getBirthYear()))
             {
                 SAccount.setPassword(RAccount.getPassword());
-                System.out.println("Changed Success");
                 return userAccountService.updateUserAccount(SAccount);
             }
         }
