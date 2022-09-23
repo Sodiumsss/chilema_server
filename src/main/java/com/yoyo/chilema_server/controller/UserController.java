@@ -57,6 +57,7 @@ public class UserController {
     public R login(String info)
     {
         UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
+        System.out.println(userAccount);
         return userAccountService.login(userAccount);
     }
     @CrossOrigin
