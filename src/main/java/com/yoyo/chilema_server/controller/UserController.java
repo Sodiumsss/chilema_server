@@ -62,6 +62,7 @@ public class UserController {
             if(RAccount.getBirthYear().equals(SAccount.getBirthYear()))
             {
                 SAccount.setPassword(RAccount.getPassword());
+                System.out.println("Changed Success");
                 return userAccountService.updateUserAccount(SAccount);
             }
         }
@@ -76,6 +77,14 @@ public class UserController {
     {
         if (!httpServletRequest.getHeader(key).equals(value)){return false;}
         return info != null;
+    }
+
+    @CrossOrigin
+    @PostMapping("/api/user/test")
+    public void test()
+    {
+
+
     }
 
 
