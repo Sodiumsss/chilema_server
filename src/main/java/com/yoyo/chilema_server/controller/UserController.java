@@ -79,6 +79,8 @@ public class UserController {
         UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
         return userAccountService.login(userAccount);
     }
+
+
     @CrossOrigin
     @PostMapping("/api/user/forgetPW")
     public R forgetPW(String info)
@@ -92,14 +94,8 @@ public class UserController {
             return R.error("填写错误！");
         }
 
-        Integer schoolId=jsonObj.getInteger("schoolId");
-        Integer birthYear=jsonObj.getInteger("birthYear");
-        String password=jsonObj.getString("password");
-
         if (RAccount.getSchoolId().equals(SAccount.getSchoolId()))
         {
-            account.setPassword(password);
-            return userAccountService.updateUserAccount(account);
             if(RAccount.getBirthYear().equals(SAccount.getBirthYear()))
             {
                 SAccount.setPassword(RAccount.getPassword());
@@ -107,10 +103,8 @@ public class UserController {
             }
         }
 
-
         return R.error("填写错误！");
     }
-
 
 
 
@@ -120,13 +114,6 @@ public class UserController {
         return info != null;
     }
 
-    @CrossOrigin
-    @PostMapping("/api/user/test")
-    public void test()
-    {
-
-
-    }
 
 
 }
