@@ -1,8 +1,10 @@
 package com.yoyo.chilema_server.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.mapper.FavorMapper;
 import com.yoyo.chilema_server.pojo.Favor;
+import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.FavorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,5 +57,16 @@ public class FavorServiceImpl implements FavorService {
     @Override
     public R selectFavorById(int id) {
         return R.success("查询成功",favorMapper.selectById(id));
+    }
+
+    @Override
+    public R deleteFavorByUN(String username) {
+        QueryWrapper<Favor> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        if(favorMapper.delete(queryWrapper) > 0) {
+            return R.success("删除成功");
+        } else {
+            return R.error("删除失败");
+        }
     }
 }

@@ -14,7 +14,7 @@ public interface UserAccountService {
 
 
     UserAccount selectUserAccountByUsername(String username);
-
+    R deleteUserAccountByUN(String username);
 
 
 }

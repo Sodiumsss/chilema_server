@@ -49,35 +49,48 @@ public class UserController {
 
     @PostMapping("/api/user/delete")
     @CrossOrigin
-    public R deleteUser(Integer id) {
-        return userAccountService.deleteUserAccount(id);
+    public R deleteUser(String username) {
+        if(userAccountService.deleteUserAccountByUN(username).getCode()+favorService.deleteFavorByUN(username).getCode() == 2) {
+            return R.success("删除成功");
+        } else {
+            return R.error("删除失败");
+        }
+    }
+
+    @PostMapping("/api/favor/update")
+    @CrossOrigin
+    public R updateFavor(String info,HttpServletRequest request) {
+        Favor favor = RequestDataUtils.decodeInfo(info, Favor.class);
+        return favorService.updateFavor(favor);
+    }
+
+    @PostMapping("/api/user/update")
+    @CrossOrigin
+    public R updateUser(String info,HttpServletRequest request) {
+        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
+        return userAccountService.updateUserAccount(userAccount);
     }
 
     @CrossOrigin
     @PostMapping("/api/user/login")
     public R login(String info,HttpServletRequest httpServletRequest)
     {
-        if (!httpServletRequest.getHeader("Login").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
-        if (info==null){return R.error("404 NOTFOUND:)");}
         UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
         return userAccountService.login(userAccount);
     }
+
     @CrossOrigin
     @PostMapping("/api/user/forgetPW")
     public R forgetPW(String info,HttpServletRequest httpServletRequest)
     {
-        if (!httpServletRequest.getHeader("forgetPW").equals("yoyo!")){return R.error("404 NOTFOUND:(");}
-        if (info==null){return R.error("404 NOTFOUND:)");}
-
-        byte[] base64decodedBytes = Base64.getDecoder().decode(info);
-        JSONObject jsonObj = JSONObject.parseObject(new String(base64decodedBytes));
+        String decodeBase64Info = RequestDataUtils.decodeBase64Info(info);
+        JSONObject jsonObj = JSONObject.parseObject(decodeBase64Info);
         String username=jsonObj.getString("username");
-        UserAccount account =userAccountService.selectUserAccountByUsername(username);
+        UserAccount account = userAccountService.selectUserAccountByUsername(username);
         if (account==null)
         {
             return R.error("填写错误！");
         }
-//        System.out.println(account);
 
         Integer schoolId=jsonObj.getInteger("schoolId");
         Integer birthYear=jsonObj.getInteger("birthYear");
@@ -86,10 +99,8 @@ public class UserController {
         if (schoolId.equals(account.getSchoolId()) && birthYear.equals(account.getBirthYear()))
         {
             account.setPassword(password);
-//            System.out.println(account);
             return userAccountService.updateUserAccount(account);
         }
-
 
         return R.error("填写错误！");
     }
