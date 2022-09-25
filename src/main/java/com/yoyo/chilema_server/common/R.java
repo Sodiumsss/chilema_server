@@ -15,6 +15,11 @@ public class R {
     private String message;
     private Object data;
 
+    public static R success() {
+        R r = new R();
+        r.setCode(1);
+        return r;
+    }
     public static R success(String message) {
         R r = new R();
         r.setCode(1);
@@ -30,6 +35,12 @@ public class R {
 
     public static R error(String message) {
         R r = success(message);
+        r.setCode(0);
+        return r;
+    }
+
+    public static R error() {
+        R r = success();
         r.setCode(0);
         return r;
     }

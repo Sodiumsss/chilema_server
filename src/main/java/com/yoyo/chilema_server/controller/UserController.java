@@ -8,20 +8,19 @@ import com.yoyo.chilema_server.service.FavorService;
 import com.yoyo.chilema_server.service.UserAccountService;
 import com.yoyo.chilema_server.utils.JsonUtils;
 import com.yoyo.chilema_server.utils.RequestDataUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.annotation.Resource;
 
 @RestController
 public class UserController {
 
-    @Autowired
+    @Resource
     private UserAccountService userAccountService;
 
-    @Autowired
+    @Resource
     private FavorService favorService;
 
     @PostMapping("/api/user/create")
@@ -114,12 +113,20 @@ public class UserController {
     }
 
 
-    private boolean testConnection(String info,String key,String value,HttpServletRequest httpServletRequest)
+    @CrossOrigin
+    @PostMapping("/api/user/verifyUsername")
+    public R verifyUsername(String info)
     {
-        if (!httpServletRequest.getHeader(key).equals(value)){return false;}
-        return info != null;
+        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
+        UserAccount saved=userAccountService.selectUserAccountByUsername(userAccount.getUsername());
+        if (saved==null)
+        {
+            return R.success();
+        }
+        else
+        {
+            return R.error();
+        }
     }
-
-
 
 }

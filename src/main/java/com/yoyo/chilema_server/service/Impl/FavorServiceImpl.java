@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.mapper.FavorMapper;
 import com.yoyo.chilema_server.pojo.Favor;
-import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.FavorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
