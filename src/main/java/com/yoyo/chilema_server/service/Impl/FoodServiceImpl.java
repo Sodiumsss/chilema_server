@@ -5,6 +5,7 @@ import com.yoyo.chilema_server.mapper.FoodMapper;
 import com.yoyo.chilema_server.pojo.Food;
 import com.yoyo.chilema_server.service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @description: TODO
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @package: com.yoyo.chilema_server.service.Impl
  * @Version: 1.0
  */
+@Service
 public class FoodServiceImpl implements FoodService {
 
     @Autowired
