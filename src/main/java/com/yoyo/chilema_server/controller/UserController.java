@@ -31,7 +31,6 @@ public class UserController {
         JSONObject obj = (JSONObject) JsonUtils.getJsonObj(requestInfo, "UserAccount");
         UserAccount userAccount = JSONObject.parseObject(String.valueOf(obj), UserAccount.class);
         JSONObject obj2 = (JSONObject) JsonUtils.getJsonObj(requestInfo, "Favor");
-        System.out.println(obj2);
         Favor favor = new Favor(
                 0,
                 userAccount.getUsername(),

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class FavorServiceImpl implements FavorService {
 
     @Autowired
-    FavorMapper favorMapper;
+    private FavorMapper favorMapper;
 
     @Override
     public R addFavor(Favor favor) {
