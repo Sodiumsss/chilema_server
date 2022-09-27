@@ -18,14 +18,12 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     @Autowired
-    AdminService adminService;
+    private AdminService adminService;
 
     @PostMapping("/api/admin/login")
     @CrossOrigin
     public R login(String loginInfo) {
-        System.out.println(loginInfo);
         Admin admin = JsonUtils.jsonToObj(loginInfo, Admin.class);
-        System.out.println(admin);
         return adminService.login(admin);
     }
 }
