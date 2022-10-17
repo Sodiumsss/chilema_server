@@ -19,4 +19,6 @@ public interface UserAccountService {
 
     R getUserNickname(UserAccount userAccount);
 
+
+    R changeUserNickname(UserAccount userAccount);
 }

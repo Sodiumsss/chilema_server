@@ -117,5 +117,27 @@ public class UserAccountServiceImpl implements UserAccountService {
         return R.success(saved.getNickname());
     }
 
+    @Override
+    public R changeUserNickname(UserAccount userAccount)
+    {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",userAccount.getUsername());
+
+        try {
+            UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+            System.out.println(saved);
+            System.out.println(userAccount);
+            if (userAccount.getPassword().equals(saved.getPassword()))
+            {
+                saved.setNickname(userAccount.getNickname());
+                return updateUserAccount(saved);
+            }
+        }catch (Exception e)
+        {
+            return R.error("更新失败！");
+        }
+
+        return  R.error("更新失败！");
+    }
 
 }

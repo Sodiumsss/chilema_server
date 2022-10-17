@@ -128,4 +128,13 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
+    @PostMapping("/api/user/changeNickname")
+    public R changeNickname(String info)
+    {
+        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
+        return userAccountService.changeUserNickname(userAccount);
+    }
+
+
 }
