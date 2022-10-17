@@ -28,13 +28,16 @@ public class AdminServiceImpl implements AdminService {
 
         try {
             Admin currentAdmin = adminMapper.selectOne(queryWrapper);
+            if(currentAdmin == null) {
+                return R.error("用户名不存在");
+            }
             if(currentAdmin.getPassword().equals(admin.getPassword())) {
                 return R.success("登录成功");
+            } else {
+                return R.error("密码错误");
             }
         } catch (Exception e) {
             return R.error("登录失败");
         }
-
-        return R.error("登录失败");
     }
 }
