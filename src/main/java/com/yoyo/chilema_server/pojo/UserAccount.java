@@ -22,4 +22,5 @@ UserAccount {
     private Integer schoolId;
     private Integer birthYear;
     private String nickname;
+    private Integer credit;
 }

@@ -82,6 +82,21 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    public R getUserCredit(UserAccount userAccount) {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",userAccount.getUsername());
+        queryWrapper.eq("password",userAccount.getPassword());
+        UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+        if (saved==null)
+        {
+            return R.error("获取失败！");
+        }
+
+        return R.success(saved.getCredit().toString());
+
+    }
+
+    @Override
     public UserAccount selectUserAccountByUsername(String username) {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",username);
@@ -116,6 +131,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         return R.success(saved.getNickname());
     }
+
+
+
 
     @Override
     public R changeUserNickname(UserAccount userAccount)

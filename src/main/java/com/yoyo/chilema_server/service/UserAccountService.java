@@ -12,6 +12,8 @@ public interface UserAccountService {
 
     R login(UserAccount received);
 
+    R getUserCredit(UserAccount userAccount);
+
 
     UserAccount selectUserAccountByUsername(String username);
     R deleteUserAccountByUN(String username);

@@ -111,7 +111,13 @@ public class UserController {
         return userAccountService.getUserNickname(userAccount);
     }
 
-
+    @CrossOrigin
+    @PostMapping("/api/user/getCredit")
+    public R getCredit(String info)
+    {
+        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
+        return userAccountService.getUserCredit(userAccount);
+    }
     @CrossOrigin
     @PostMapping("/api/user/verifyUsername")
     public R verifyUsername(String info)
