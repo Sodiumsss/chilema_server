@@ -136,5 +136,11 @@ public class UserController {
         return userAccountService.changeUserNickname(userAccount);
     }
 
+    @CrossOrigin
+    @PostMapping("/api/user/getList")
+    public R getUserList()
+    {
+        return userAccountService.selectAllUserAccount();
+    }
 
 }
