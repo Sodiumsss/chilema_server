@@ -1,8 +1,13 @@
 package com.yoyo.chilema_server.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @description: 个人喜好
@@ -14,11 +19,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName(autoResultMap = true)
 public class Favor {
-    private int id;
-    private String username;
-    private String step1;
-    private String step2;
-    private String step3;
-    private String step4;
+    private Long id;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<Double> taste;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<Integer> preference;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<Integer> meals;
 }

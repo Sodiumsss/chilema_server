@@ -1,5 +1,8 @@
 package com.yoyo.chilema_server.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,11 +19,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class
 UserAccount {
-    private int id;
+
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
     private String username;
     private String password;
     private Integer schoolId;
     private Integer birthYear;
     private String nickname;
     private Integer credit;
+    private boolean hollow;
+    private Integer sex;
+
 }

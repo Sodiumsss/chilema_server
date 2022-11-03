@@ -10,7 +10,9 @@ public interface UserAccountService {
     R selectAllUserAccount();
     R selectUserAccountById(int id);
 
-    R login(UserAccount received);
+    R login(UserAccount userAccount);
+
+    R validate(UserAccount userAccount);
 
     R getUserCredit(UserAccount userAccount);
 

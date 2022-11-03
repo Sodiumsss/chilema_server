@@ -22,10 +22,11 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public R addUserAccount(UserAccount userAccount) {
+        userAccount.setCredit(0);
         if(userAccountMapper.insert(userAccount) > 0) {
-            return  R.success("注册成功！");
+            return  R.success();
         } else {
-            return  R.error("注册失败！");
+            return  R.error();
         }
     }
 
@@ -58,38 +59,57 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public R login(UserAccount received) {
+    public R login(UserAccount userAccount)
+    {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("username",received.getUsername());
-
-
+        queryWrapper.eq("username",userAccount.getUsername());
         try {
             UserAccount saved = userAccountMapper.selectOne(queryWrapper);
-            System.out.println(saved);
-            System.out.println(received);
-
-            if (received.getPassword().equals(saved.getPassword()))
+            if (userAccount.getPassword().equals(saved.getPassword()))
             {
-                return  R.success("登录成功！");
+                return  R.success(saved.getNickname());
             }
         }catch (Exception e)
         {
-            //e.printStackTrace();
-            return R.error("登录失败！");
+            return R.error();
         }
 
-        return  R.error("登录失败！");
+        return  R.error();
     }
+
+    @Override
+    public R validate(UserAccount userAccount) {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",userAccount.getUsername());
+        try {
+            UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+            if (userAccount.getPassword().equals(saved.getPassword()))
+            {
+                if (userAccount.getNickname().equals(saved.getNickname()))
+                {
+                    return  R.success();
+                }
+            }
+        }catch (Exception e)
+        {
+            return R.error();
+        }
+
+        return  R.error();
+    }
+
 
     @Override
     public R getUserCredit(UserAccount userAccount) {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",userAccount.getUsername());
         queryWrapper.eq("password",userAccount.getPassword());
+        queryWrapper.eq("nickname",userAccount.getNickname());
+
         UserAccount saved = userAccountMapper.selectOne(queryWrapper);
         if (saved==null)
         {
-            return R.error("获取失败！");
+            return R.error();
         }
 
         return R.success(saved.getCredit().toString());
@@ -123,17 +143,15 @@ public class UserAccountServiceImpl implements UserAccountService {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",userAccount.getUsername());
         queryWrapper.eq("password",userAccount.getPassword());
+        queryWrapper.eq("nickname",userAccount.getNickname());
         UserAccount saved = userAccountMapper.selectOne(queryWrapper);
         if (saved==null)
         {
-            return R.error("你的Cookies似乎有些问题，请重新登录！");
+            return R.error();
         }
 
         return R.success(saved.getNickname());
     }
-
-
-
 
     @Override
     public R changeUserNickname(UserAccount userAccount)
@@ -143,8 +161,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         try {
             UserAccount saved = userAccountMapper.selectOne(queryWrapper);
-            System.out.println(saved);
-            System.out.println(userAccount);
             if (userAccount.getPassword().equals(saved.getPassword()))
             {
                 saved.setNickname(userAccount.getNickname());
@@ -152,10 +168,11 @@ public class UserAccountServiceImpl implements UserAccountService {
             }
         }catch (Exception e)
         {
-            return R.error("更新失败！");
+            e.printStackTrace();
+            return R.error();
         }
 
-        return  R.error("更新失败！");
+        return  R.error();
     }
 
 }

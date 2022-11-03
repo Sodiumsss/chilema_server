@@ -1,16 +1,13 @@
 package com.yoyo.chilema_server.controller;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.yoyo.chilema_server.common.R;
+import com.yoyo.chilema_server.pojo.UserWithFavor;
 import com.yoyo.chilema_server.pojo.Favor;
 import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.FavorService;
 import com.yoyo.chilema_server.service.UserAccountService;
-import com.yoyo.chilema_server.utils.JsonUtils;
 import com.yoyo.chilema_server.utils.RequestDataUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -25,24 +22,33 @@ public class UserController {
 
     @PostMapping("/api/user/create")
     @CrossOrigin
-    public R createUser(String info) {
-        String requestInfo = RequestDataUtils.decodeBase64Info(info);
+    public R createUser(@RequestBody UserWithFavor userWithFavor) {
 
-        JSONObject obj = (JSONObject) JsonUtils.getJsonObj(requestInfo, "UserAccount");
-        UserAccount userAccount = JSONObject.parseObject(String.valueOf(obj), UserAccount.class);
-        JSONObject obj2 = (JSONObject) JsonUtils.getJsonObj(requestInfo, "Favor");
-        Favor favor = new Favor(
-                0,
-                userAccount.getUsername(),
-                obj2.get("step1").toString(),
-                obj2.get("step2").toString(),
-                obj2.get("step3").toString(),
-                obj2.get("step4").toString());
-        if(userAccountService.addUserAccount(userAccount).getCode()+favorService.addFavor(favor).getCode() == 2) {
-            return R.success("注册成功");
-        } else {
+        UserAccount userAccount=userWithFavor.getUserAccount();
+        Favor favor=userWithFavor.getFavor();
+        try {
+            if (userAccountService.addUserAccount(userAccount).getCode()==1)
+            {
+                favor.setId(userAccount.getId());
+                if (favorService.addFavor(favor).getCode()==1)
+                {
+                    return R.success();
+                }
+                else
+                {
+                    return R.error();
+                }
+            }
+            else
+            {
+                return R.error();
+            }
+        }
+        catch (Exception e)
+        {
             return R.error("注册失败");
         }
+
     }
 
     @PostMapping("/api/user/delete")
@@ -71,24 +77,28 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/api/user/login")
-    public R login(String info)
+    public R login(@RequestBody UserAccount userAccount)
     {
-        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
         return userAccountService.login(userAccount);
+    }
+
+    @CrossOrigin
+    @PostMapping("/api/user/validate")
+    public R validate(@RequestBody UserAccount userAccount)
+    {
+        return userAccountService.validate(userAccount);
     }
 
 
     @CrossOrigin
     @PostMapping("/api/user/forgetPW")
-    public R forgetPW(String info)
+    public R forgetPW(@RequestBody UserAccount RAccount)//用户传进来的
     {
-        UserAccount RAccount = RequestDataUtils.decodeInfo(info,UserAccount.class);
-
-        UserAccount SAccount =userAccountService.selectUserAccountByUsername(RAccount.getUsername());
+        UserAccount SAccount =userAccountService.selectUserAccountByUsername(RAccount.getUsername());//SQL中的
 
         if (SAccount==null)
         {
-            return R.error("填写错误！");
+            return R.error();
         }
 
         if (RAccount.getSchoolId().equals(SAccount.getSchoolId()))
@@ -100,7 +110,7 @@ public class UserController {
             }
         }
 
-        return R.error("填写错误！");
+        return R.error();
     }
 
     @CrossOrigin
@@ -113,16 +123,14 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/api/user/getCredit")
-    public R getCredit(String info)
+    public R getCredit( @RequestBody UserAccount userAccount)
     {
-        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
         return userAccountService.getUserCredit(userAccount);
     }
     @CrossOrigin
     @PostMapping("/api/user/verifyUsername")
-    public R verifyUsername(String info)
+    public R verifyUsername(@RequestBody UserAccount userAccount)
     {
-        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
         UserAccount saved=userAccountService.selectUserAccountByUsername(userAccount.getUsername());
         if (saved==null)
         {
@@ -136,9 +144,8 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/api/user/changeNickname")
-    public R changeNickname(String info)
+    public R changeNickname(@RequestBody UserAccount userAccount)
     {
-        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
         return userAccountService.changeUserNickname(userAccount);
     }
 
@@ -149,4 +156,11 @@ public class UserController {
         return userAccountService.selectAllUserAccount();
     }
 
+    @CrossOrigin
+    @PostMapping("/api/user/test")
+    public R test(@RequestBody UserAccount userAccount)
+    {
+        System.out.println(userAccount);
+        return R.success("666");
+    }
 }
