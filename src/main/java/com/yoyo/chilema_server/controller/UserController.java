@@ -50,46 +50,41 @@ public class UserController {
         }
 
     }
-
     @PostMapping("/api/user/delete")
     @CrossOrigin
-    public R deleteUser(String username) {
-        if(userAccountService.deleteUserAccountByUN(username).getCode()+favorService.deleteFavorByUN(username).getCode() == 2) {
-            return R.success("删除成功");
+    public R deleteUser(@RequestBody UserAccount userAccount) {
+        if(favorService.deleteFavorById(userAccount.getId()).getCode() == 1)
+        {
+            return userAccountService.deleteUserAccountByUN(userAccount.getUsername());
         } else {
-            return R.error("删除失败");
+            return R.error();
         }
     }
-
     @PostMapping("/api/favor/update")
     @CrossOrigin
-    public R updateFavor(String info) {
-        Favor favor = RequestDataUtils.decodeInfo(info, Favor.class);
+    public R updateFavor(@RequestBody UserWithFavor userWithFavor) {
+        Favor favor = userWithFavor.getFavor();
+        favor.setId(userWithFavor.getUserAccount().getId());
         return favorService.updateFavor(favor);
     }
-
     @PostMapping("/api/user/update")
     @CrossOrigin
     public R updateUser(String info) {
         UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
         return userAccountService.updateUserAccount(userAccount);
     }
-
     @CrossOrigin
     @PostMapping("/api/user/login")
     public R login(@RequestBody UserAccount userAccount)
     {
         return userAccountService.login(userAccount);
     }
-
     @CrossOrigin
     @PostMapping("/api/user/validate")
     public R validate(@RequestBody UserAccount userAccount)
     {
         return userAccountService.validate(userAccount);
     }
-
-
     @CrossOrigin
     @PostMapping("/api/user/forgetPW")
     public R forgetPW(@RequestBody UserAccount RAccount)//用户传进来的
@@ -112,15 +107,6 @@ public class UserController {
 
         return R.error();
     }
-
-    @CrossOrigin
-    @PostMapping("/api/user/getNickname")
-    public R getNickname(String info)
-    {
-        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
-        return userAccountService.getUserNickname(userAccount);
-    }
-
     @CrossOrigin
     @PostMapping("/api/user/getCredit")
     public R getCredit( @RequestBody UserAccount userAccount)
@@ -141,21 +127,18 @@ public class UserController {
             return R.error();
         }
     }
-
     @CrossOrigin
     @PostMapping("/api/user/changeNickname")
     public R changeNickname(@RequestBody UserAccount userAccount)
     {
         return userAccountService.changeUserNickname(userAccount);
     }
-
     @CrossOrigin
     @PostMapping("/api/user/getList")
     public R getUserList()
     {
         return userAccountService.selectAllUserAccount();
     }
-
     @CrossOrigin
     @PostMapping("/api/user/test")
     public R test(@RequestBody UserAccount userAccount)

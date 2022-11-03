@@ -5,10 +5,9 @@ import com.yoyo.chilema_server.pojo.Favor;
 
 public interface FavorService {
     R addFavor(Favor favor);
-    R deleteFavor(int id);
+    R deleteFavorById(Long id);
     R updateFavor(Favor favor);
     R selectFavor();
-    R selectFavorById(int id);
+    R selectFavorById(Favor favor);
 
-    R deleteFavorByUN(String username);
 }

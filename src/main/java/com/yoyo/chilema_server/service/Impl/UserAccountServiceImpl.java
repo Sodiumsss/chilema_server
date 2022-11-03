@@ -31,31 +31,31 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public R deleteUserAccount(int id) {
-        if(userAccountMapper.deleteById(id) > 0) {
-            return  R.success("删除成功！");
+    public R deleteUserAccount(UserAccount userAccount) {
+        if(userAccountMapper.deleteById(userAccount.getId()) > 0) {
+            return  R.success();
         } else {
-            return  R.error("删除失败！");
+            return  R.error();
         }
     }
 
     @Override
     public R updateUserAccount(UserAccount userAccount) {
         if(userAccountMapper.updateById(userAccount) > 0) {
-            return  R.success("更新成功！");
+            return  R.success();
         } else {
-            return  R.error("更新失败！");
+            return  R.error();
         }
     }
 
     @Override
     public R selectAllUserAccount() {
-        return R.success("查询成功！",userAccountMapper.selectList(null));
+        return R.success("",userAccountMapper.selectList(null));
     }
 
     @Override
-    public R selectUserAccountById(int id) {
-        return R.success("查询成功！",userAccountMapper.selectById(id));
+    public R selectUserAccountById(Long id) {
+        return R.success("",userAccountMapper.selectById(id));
     }
 
     @Override
@@ -101,12 +101,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public R getUserCredit(UserAccount userAccount) {
-        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("username",userAccount.getUsername());
-        queryWrapper.eq("password",userAccount.getPassword());
-        queryWrapper.eq("nickname",userAccount.getNickname());
-
-        UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+        UserAccount saved = selectUserBy3P(userAccount);
         if (saved==null)
         {
             return R.error();
@@ -120,11 +115,21 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccount selectUserAccountByUsername(String username) {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",username);
-        try {
+        try
+        {
             return userAccountMapper.selectOne(queryWrapper);
-        }catch (Exception ignored){
-        }
+        }catch (Exception ignored) {}
+
         return null;
+    }
+
+    @Override
+    public UserAccount selectUserBy3P(UserAccount userAccount) {
+        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",userAccount.getUsername());
+        queryWrapper.eq("password",userAccount.getPassword());
+        queryWrapper.eq("nickname",userAccount.getNickname());
+        return userAccountMapper.selectOne(queryWrapper);
     }
 
     @Override
@@ -132,26 +137,13 @@ public class UserAccountServiceImpl implements UserAccountService {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",username);
         if(userAccountMapper.delete(queryWrapper) > 0) {
-            return R.success("删除成功");
-        } else {
-            return R.error("删除失败");
-        }
-    }
-
-    @Override
-    public R getUserNickname(UserAccount userAccount) {
-        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("username",userAccount.getUsername());
-        queryWrapper.eq("password",userAccount.getPassword());
-        queryWrapper.eq("nickname",userAccount.getNickname());
-        UserAccount saved = userAccountMapper.selectOne(queryWrapper);
-        if (saved==null)
+            return R.success();
+        } else
         {
             return R.error();
         }
-
-        return R.success(saved.getNickname());
     }
+
 
     @Override
     public R changeUserNickname(UserAccount userAccount)

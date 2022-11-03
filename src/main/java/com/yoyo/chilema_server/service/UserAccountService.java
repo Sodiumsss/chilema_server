@@ -5,10 +5,10 @@ import com.yoyo.chilema_server.pojo.UserAccount;
 
 public interface UserAccountService {
     R addUserAccount(UserAccount userAccount);
-    R deleteUserAccount(int id);
+    R deleteUserAccount(UserAccount userAccount);
     R updateUserAccount(UserAccount userAccount);
     R selectAllUserAccount();
-    R selectUserAccountById(int id);
+    R selectUserAccountById(Long id);
 
     R login(UserAccount userAccount);
 
@@ -16,13 +16,11 @@ public interface UserAccountService {
 
     R getUserCredit(UserAccount userAccount);
 
-
     UserAccount selectUserAccountByUsername(String username);
+
+    UserAccount selectUserBy3P(UserAccount userAccount);
+
     R deleteUserAccountByUN(String username);
-
-
-    R getUserNickname(UserAccount userAccount);
-
 
     R changeUserNickname(UserAccount userAccount);
 }
