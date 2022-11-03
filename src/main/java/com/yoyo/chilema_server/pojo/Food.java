@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Food {
-    private int id;
+    private Long id;
     private String name;
     private int acid;
     private int sweet;

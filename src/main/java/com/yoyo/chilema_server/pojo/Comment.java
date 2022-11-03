@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment {
-    private int id;
-    private int foodId;
-    private int userId;
+    private Long id;
+    private Long foodId;
+    private Long userId;
     private String content;
     private float rate;
     private String createTime;
