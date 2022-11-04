@@ -17,6 +17,6 @@ public interface UserAccountService {
     UserAccount selectUserBy3P(UserAccount userAccount);
 
     R deleteUserAccountByUN(String username);
-
+    R deleteUserAccountById(Long id);
     R changeUserNickname(UserAccount userAccount);
 }

@@ -134,4 +134,12 @@ public class UserAccountServiceImpl implements UserAccountService {
         return  R.error();
     }
 
+    @Override
+    public R deleteUserAccountById(Long id) {
+        if(userAccountMapper.deleteById(id) > 0) {
+            return R.success();
+        } else {
+            return R.error();
+        }
+    }
 }

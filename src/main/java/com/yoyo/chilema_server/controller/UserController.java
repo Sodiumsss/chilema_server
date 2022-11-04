@@ -53,10 +53,10 @@ public class UserController {
     }
     @PostMapping("/api/user/delete")
     @CrossOrigin
-    public R deleteUser(@RequestBody UserAccount userAccount) {
-        if(favorService.deleteFavorById(userAccount.getId()).getCode() == 1)
+    public R deleteUser(@RequestBody Long id) {
+        if(favorService.deleteFavorById(id).getCode() == 1)
         {
-            return userAccountService.deleteUserAccountByUN(userAccount.getUsername());
+            return userAccountService.deleteUserAccountById(id);
         } else {
             return R.error();
         }
@@ -70,9 +70,7 @@ public class UserController {
     }
     @PostMapping("/api/user/update")
     @CrossOrigin
-    public R updateUser(String userInfo) {
-        UserAccount userAccount = JsonUtils.jsonToObj(userInfo,UserAccount.class);
-        System.out.println(userAccount);
+    public R updateUser(@RequestBody UserAccount userAccount) {
         return userAccountService.updateUserAccount(userAccount);
     }
     @CrossOrigin
