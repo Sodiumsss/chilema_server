@@ -28,7 +28,7 @@ UserAccount {
     private Integer birthYear;
     private String nickname;
     private Integer credit;
-    private Boolean hollow;
+    private Integer hollow;
     private Integer sex;
 
     public Boolean equal(UserAccount another)
