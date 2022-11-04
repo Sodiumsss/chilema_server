@@ -12,10 +12,6 @@ public interface UserAccountService {
 
     R login(UserAccount userAccount);
 
-    R validate(UserAccount userAccount);
-
-    R getUserCredit(UserAccount userAccount);
-
     UserAccount selectUserAccountByUsername(String username);
 
     UserAccount selectUserBy3P(UserAccount userAccount);

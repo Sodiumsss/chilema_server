@@ -77,37 +77,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         return  R.error();
     }
 
-    @Override
-    public R validate(UserAccount userAccount) {
-        System.out.println("Validate！");
-        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("username",userAccount.getUsername());
-        try {
-            UserAccount saved = userAccountMapper.selectOne(queryWrapper);
-            if (saved.equal(userAccount))
-            {
-                return R.success();
-            }
-        }catch (Exception e)
-        {
-            return R.error();
-        }
-
-        return  R.error();
-    }
-
-
-    @Override
-    public R getUserCredit(UserAccount userAccount) {
-        UserAccount saved = selectUserBy3P(userAccount);
-        if (saved==null)
-        {
-            return R.error();
-        }
-
-        return R.success(saved.getCredit().toString());
-
-    }
 
     @Override
     public UserAccount selectUserAccountByUsername(String username) {

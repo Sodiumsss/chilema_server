@@ -20,21 +20,6 @@ public class UserController {
     @Resource
     private FavorService favorService;
 
-    @PostMapping("/api/user/getHollow")
-    @CrossOrigin
-    public R getHollow(@RequestBody UserAccount userAccount)
-    {
-        UserAccount user = userAccountService.selectUserAccountByUsername(userAccount.getUsername());
-        if (userAccount.equal(user))
-        {
-            if (user.getHollow())
-            {
-                return R.success();//SQL中hollow字段为1
-            }
-            return R.error();//SQL中hollow字段为0
-        }
-        return R.error();//比对失败
-    }
     @PostMapping("/api/user/create")
     @CrossOrigin
     public R createUser(@RequestBody UserWithFavor userWithFavor) {
@@ -84,8 +69,7 @@ public class UserController {
     }
     @PostMapping("/api/user/update")
     @CrossOrigin
-    public R updateUser(String info) {
-        UserAccount userAccount = RequestDataUtils.decodeInfo(info, UserAccount.class);
+    public R updateUser(@RequestBody UserAccount userAccount) {
         return userAccountService.updateUserAccount(userAccount);
     }
     @CrossOrigin
@@ -94,12 +78,21 @@ public class UserController {
     {
         return userAccountService.login(userAccount);
     }
+
     @CrossOrigin
-    @PostMapping("/api/user/validate")
-    public R validate(@RequestBody UserAccount userAccount)
+    @PostMapping("/api/user/validateAndGet")
+    public R validateAndGet(@RequestBody UserAccount userAccount)
     {
-        return userAccountService.validate(userAccount);
+        UserAccount sqlUser = userAccountService.selectUserBy3P(userAccount);
+        if (sqlUser!=null)
+        {
+            sqlUser.clearSensitiveness();
+            return R.success("",sqlUser);
+        }
+        return R.error();
     }
+
+
     @CrossOrigin
     @PostMapping("/api/user/forgetPW")
     public R forgetPW(@RequestBody UserAccount RAccount)//用户传进来的
@@ -122,26 +115,7 @@ public class UserController {
 
         return R.error();
     }
-    @CrossOrigin
-    @PostMapping("/api/user/getCredit")
-    public R getCredit( @RequestBody UserAccount userAccount)
-    {
-        return userAccountService.getUserCredit(userAccount);
-    }
-    @CrossOrigin
-    @PostMapping("/api/user/verifyUsername")
-    public R verifyUsername(@RequestBody UserAccount userAccount)
-    {
-        UserAccount saved=userAccountService.selectUserAccountByUsername(userAccount.getUsername());
-        if (saved==null)
-        {
-            return R.success();
-        }
-        else
-        {
-            return R.error();
-        }
-    }
+
     @CrossOrigin
     @PostMapping("/api/user/changeNickname")
     public R changeNickname(@RequestBody UserAccount userAccount)
@@ -154,11 +128,5 @@ public class UserController {
     {
         return userAccountService.selectAllUserAccount();
     }
-    @CrossOrigin
-    @PostMapping("/api/user/test")
-    public R test(@RequestBody UserAccount userAccount)
-    {
-        System.out.println(userAccount);
-        return R.success("666");
-    }
+
 }

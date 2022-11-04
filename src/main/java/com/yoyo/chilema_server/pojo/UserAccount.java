@@ -43,4 +43,10 @@ UserAccount {
         return false;
     }
 
+    public void clearSensitiveness()
+    {
+        this.schoolId=null;
+        this.birthYear=null;
+    }
+
 }
