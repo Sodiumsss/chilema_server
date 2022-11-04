@@ -81,7 +81,15 @@ public class UserController {
     {
         return userAccountService.login(userAccount);
     }
+    @CrossOrigin
+    @PostMapping("/api/user/joinHollow")
+    public R joinHollow(@RequestBody UserAccount userAccount)
+    {
+        UserAccount sqlUser = userAccountService.selectUserBy3P(userAccount);
 
+        sqlUser.setHollow(1);
+        return userAccountService.updateUserAccount(sqlUser);
+    }
     @CrossOrigin
     @PostMapping("/api/user/validateAndGet")
     public R validateAndGet(@RequestBody UserAccount userAccount)
@@ -90,7 +98,7 @@ public class UserController {
         if (sqlUser!=null)
         {
             sqlUser.clearSensitiveness();
-            return R.success("",sqlUser);
+            return R.success(null,sqlUser);
         }
         return R.error();
     }
