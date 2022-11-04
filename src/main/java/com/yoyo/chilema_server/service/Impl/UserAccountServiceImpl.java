@@ -79,16 +79,14 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public R validate(UserAccount userAccount) {
+        System.out.println("Validate！");
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("username",userAccount.getUsername());
         try {
             UserAccount saved = userAccountMapper.selectOne(queryWrapper);
-            if (userAccount.getPassword().equals(saved.getPassword()))
+            if (saved.equal(userAccount))
             {
-                if (userAccount.getNickname().equals(saved.getNickname()))
-                {
-                    return  R.success();
-                }
+                return R.success();
             }
         }catch (Exception e)
         {

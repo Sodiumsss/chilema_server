@@ -28,7 +28,19 @@ UserAccount {
     private Integer birthYear;
     private String nickname;
     private Integer credit;
-    private boolean hollow;
+    private Boolean hollow;
     private Integer sex;
+
+    public Boolean equal(UserAccount another)
+    {//比对用户名，密码，昵称
+        if (this.username.equals(another.getUsername()))
+        {
+            if (this.password.equals(another.getPassword()))
+            {
+                return this.nickname.equals(another.getNickname());
+            }
+        }
+        return false;
+    }
 
 }

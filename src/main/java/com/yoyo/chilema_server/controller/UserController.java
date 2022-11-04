@@ -20,6 +20,21 @@ public class UserController {
     @Resource
     private FavorService favorService;
 
+    @PostMapping("/api/user/getHollow")
+    @CrossOrigin
+    public R getHollow(@RequestBody UserAccount userAccount)
+    {
+        UserAccount user = userAccountService.selectUserAccountByUsername(userAccount.getUsername());
+        if (userAccount.equal(user))
+        {
+            if (user.getHollow())
+            {
+                return R.success();//SQL中hollow字段为1
+            }
+            return R.error();//SQL中hollow字段为0
+        }
+        return R.error();//比对失败
+    }
     @PostMapping("/api/user/create")
     @CrossOrigin
     public R createUser(@RequestBody UserWithFavor userWithFavor) {
