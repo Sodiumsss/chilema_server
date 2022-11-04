@@ -133,6 +133,16 @@ public class UserController {
         return userAccountService.changeUserNickname(userAccount);
     }
     @CrossOrigin
+    @PostMapping("/api/user/verifyUsername")
+    public R verifyUsername(@RequestBody UserAccount userAccount)
+    {
+        UserAccount saved=userAccountService.selectUserAccountByUsername(userAccount.getUsername());
+        return saved==null?R.success():R.error();
+
+    }
+
+
+    @CrossOrigin
     @PostMapping("/api/user/getList")
     public R getUserList()
     {
