@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 public class HollowThreadHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        System.out.println(metaObject.hasGetter("createTime"));
         setFieldValByName("createTime", LocalDateTime.now(),metaObject);
     }
     @Override

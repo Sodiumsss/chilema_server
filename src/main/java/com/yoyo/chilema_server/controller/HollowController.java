@@ -1,14 +1,13 @@
 package com.yoyo.chilema_server.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yoyo.chilema_server.common.R;
+import com.yoyo.chilema_server.pojo.HollowThread;
 import com.yoyo.chilema_server.service.HollowThreadService;
-import com.yoyo.chilema_server.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class HollowController {
@@ -16,10 +15,18 @@ public class HollowController {
     HollowThreadService hollowThreadService;
 
     @CrossOrigin
-    @GetMapping("/1")
-    void test()
+    @PostMapping("/api/hollow/post")
+    R post(@RequestBody HollowThread hollowThread)
     {
-        hollowThreadService.test();
+        System.out.println(hollowThread);
+        return hollowThreadService.post(hollowThread);
+    }
+
+    @CrossOrigin
+    @PostMapping("/api/hollow/get")
+    R get(@RequestBody Integer page)
+    {
+        return hollowThreadService.get(page);
     }
 
 
