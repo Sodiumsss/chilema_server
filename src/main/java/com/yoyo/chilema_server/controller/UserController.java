@@ -95,6 +95,7 @@ public class UserController {
         UserAccount sqlUser = userAccountService.selectUserBy3P(userAccount);
         if (sqlUser!=null)
         {
+            System.out.println(sqlUser);
             sqlUser.clearSensitiveness();
             return R.success(null,sqlUser);
         }

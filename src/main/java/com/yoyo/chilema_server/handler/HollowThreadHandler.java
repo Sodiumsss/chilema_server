@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 @Component
-public class HollowThread implements MetaObjectHandler {
+public class HollowThreadHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject,"createTime", LocalDateTime.class,LocalDateTime.now());
+        System.out.println(metaObject.hasGetter("createTime"));
+        setFieldValByName("createTime", LocalDateTime.now(),metaObject);
     }
-
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
+        setFieldValByName("updateTime",LocalDateTime.now(),metaObject);
     }
 }
