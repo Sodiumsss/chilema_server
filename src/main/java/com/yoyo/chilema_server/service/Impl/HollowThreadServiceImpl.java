@@ -21,10 +21,14 @@ public class HollowThreadServiceImpl implements HollowThreadService {
     public void test() {
 
         HollowThread hollowThread=new HollowThread();
-        hollowThread.setText("666");
+        hollowThread.setId(1588505108570726402L);
+        hollowThread.setText("6666");
         hollowThread.setUserid(1L);
         hollowThread.setTitle("2");
-        hollowThreadMapper.insert(hollowThread);
+        hollowThreadMapper.updateById(hollowThread);
 
     }
+
+
+
 }
