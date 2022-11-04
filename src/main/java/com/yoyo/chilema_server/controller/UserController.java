@@ -6,6 +6,7 @@ import com.yoyo.chilema_server.pojo.Favor;
 import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.FavorService;
 import com.yoyo.chilema_server.service.UserAccountService;
+import com.yoyo.chilema_server.utils.JsonUtils;
 import com.yoyo.chilema_server.utils.RequestDataUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,7 +70,9 @@ public class UserController {
     }
     @PostMapping("/api/user/update")
     @CrossOrigin
-    public R updateUser(@RequestBody UserAccount userAccount) {
+    public R updateUser(String userInfo) {
+        UserAccount userAccount = JsonUtils.jsonToObj(userInfo,UserAccount.class);
+        System.out.println(userAccount);
         return userAccountService.updateUserAccount(userAccount);
     }
     @CrossOrigin
