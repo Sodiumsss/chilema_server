@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HollowThread {
-    private int id;
-    private int userid;
+    private Long id;
+    private Long userid;
     private String title;
     private String text;
     private String datetime;
