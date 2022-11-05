@@ -1,33 +1,52 @@
 package com.yoyo.chilema_server.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.pojo.HollowThread;
+import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.HollowThreadService;
+import com.yoyo.chilema_server.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class HollowController {
     @Autowired
     HollowThreadService hollowThreadService;
+    @Autowired
+    UserAccountService userAccountService;
 
     @CrossOrigin
     @PostMapping("/api/hollow/post")
-    R post(@RequestBody HollowThread hollowThread)
+    R post(@RequestBody HollowThread hollowThread,HttpServletRequest request)
     {
-        System.out.println(hollowThread);
+        String token =getTokenFromHeader(request);
+        UserAccount userAccount= userAccountService.getUserByToken(token);
+        if (userAccount==null)
+        {
+            return R.error();
+        }
+        hollowThread.setUserId(userAccount.getId());
+        hollowThread.setSenderName(userAccount.getNickname());
         return hollowThreadService.post(hollowThread);
     }
 
     @CrossOrigin
-    @PostMapping("/api/hollow/get")
-    R getHollowThreads(@RequestBody Integer page)
-    {
-        return hollowThreadService.get(page);
+    @PostMapping("/api/hollow/getHollowByDesc")
+    R getHollowByDesc(@RequestBody Integer page)
+    {//不需要传递Text，也不需要传递userid，get方法已清洗数据
+        return hollowThreadService.getHollowByDesc(page);
+    }
+    @CrossOrigin
+    @PostMapping("/api/hollow/getHollowByAsc")
+    R getHollowByAsc(@RequestBody Integer page)
+    {//不需要传递Text，也不需要传递userid，get方法已清洗数据
+        return hollowThreadService.getHollowByAsc(page);
     }
 
-
+    public String getTokenFromHeader(HttpServletRequest request)
+    {
+        return request.getHeader("userToken");
+    }
 }

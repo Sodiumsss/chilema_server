@@ -1,5 +1,6 @@
 package com.yoyo.chilema_server.service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yoyo.chilema_server.common.R;
@@ -26,13 +27,31 @@ public class HollowThreadServiceImpl implements HollowThreadService {
     }
 
     @Override
-    public R get(Integer page) {
+    public R getHollowByDesc(Integer page) {
+        IPage<HollowThread> iPage=new Page<>(page,5);
+        QueryWrapper<HollowThread> queryWrapper =new QueryWrapper<>();
+        queryWrapper.select().orderByDesc("create_time");
+        iPage=hollowThreadMapper.selectPage(iPage,queryWrapper);
+        List<HollowThread> list = iPage.getRecords();
+        for (HollowThread i :list)
+        {
+            i.setText(null);
+            i.setUserId(null);
+        }
+        return R.success(null,list);
+    }
+    @Override
+    public R getHollowByAsc(Integer page) {
         IPage<HollowThread> iPage=new Page<>(page,5);
         iPage=hollowThreadMapper.selectPage(iPage,null);
         List<HollowThread> list = iPage.getRecords();
+        for (HollowThread i :list)
+        {
+            i.setText(null);
+            i.setUserId(null);
+        }
         return R.success(null,list);
     }
-
     @Override
     public R deleteById(Long id) {
         if(hollowThreadMapper.deleteById(id) > 0) {
