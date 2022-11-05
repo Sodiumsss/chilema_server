@@ -102,7 +102,6 @@ public class UserAccountServiceImpl implements UserAccountService {
             if (userAccount.getPassword().equals(saved.getPassword()))
             {
                 String token= UUID.randomUUID().toString().replace("-","");
-                saved.clearSensitiveness();
                 redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
                 return R.success(token,TOKEN_EXPIRE);
             }
@@ -115,7 +114,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 
     @Override
-    public R getByToken(String token)
+    public R getRByToken(String token)
     {
         if(StringUtils.isEmpty(token))
         {
@@ -128,9 +127,26 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
         UserAccount userAccount= JSON.parseObject(json,UserAccount.class);
         redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(userAccount),TOKEN_EXPIRE);//重置有效期
-        return R.success(userAccount);
+        userAccount.clearSensitiveness();
+        return R.success(userAccount);//清除敏感信息后返回R，但redis中保留所有信息
 
     }
+
+    @Override
+    public UserAccount getUserByToken(String token) {//没有清除敏感信息
+        if(StringUtils.isEmpty(token))
+        {
+            return null;
+        }
+        String json =redisUtils.get(COOKIE_NAME_TOKEN+"::"+token);
+        System.out.println(token+"|"+json);
+        if (json==null)
+        {
+            return null;
+        }
+        return JSON.parseObject(json,UserAccount.class);
+    }
+
 
     @Override
     public boolean verify(String token) {
@@ -140,6 +156,11 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
         String json =redisUtils.get(COOKIE_NAME_TOKEN+"::"+token);
         return json != null;
+    }
+
+    @Override
+    public void setToken(String token, UserAccount userAccount) {
+        redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(userAccount),TOKEN_EXPIRE);//更新并重置有效期
     }
 
     @Override
@@ -187,6 +208,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             if (userAccount.getPassword().equals(saved.getPassword()))
             {
                 saved.setNickname(userAccount.getNickname());
+
                 return updateUserAccount(saved);
             }
         }catch (Exception e)

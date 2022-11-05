@@ -30,7 +30,6 @@ public class HollowThreadServiceImpl implements HollowThreadService {
         IPage<HollowThread> iPage=new Page<>(page,5);
         iPage=hollowThreadMapper.selectPage(iPage,null);
         List<HollowThread> list = iPage.getRecords();
-        System.out.println(list);
         return R.success(null,list);
     }
 

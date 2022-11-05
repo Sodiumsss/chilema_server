@@ -24,7 +24,7 @@ public class HollowController {
 
     @CrossOrigin
     @PostMapping("/api/hollow/get")
-    R get(@RequestBody Integer page)
+    R getHollowThreads(@RequestBody Integer page)
     {
         return hollowThreadService.get(page);
     }

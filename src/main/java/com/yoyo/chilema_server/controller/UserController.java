@@ -6,16 +6,11 @@ import com.yoyo.chilema_server.pojo.Favor;
 import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.FavorService;
 import com.yoyo.chilema_server.service.UserAccountService;
-import com.yoyo.chilema_server.utils.JsonUtils;
 import com.yoyo.chilema_server.utils.RedisUtils;
-import com.yoyo.chilema_server.utils.RequestDataUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -88,33 +83,25 @@ public class UserController {
 //    }
     @CrossOrigin
     @PostMapping("/api/user/joinHollow")
-    public R joinHollow(@RequestBody UserAccount userAccount)
+    public R joinHollow(HttpServletRequest request)
     {
-        UserAccount sqlUser = userAccountService.selectUserBy3P(userAccount);
-
-        sqlUser.setHollow(1);
-        return userAccountService.updateUserAccount(sqlUser);
-    }
-    @CrossOrigin
-    @PostMapping("/api/user/validateAndGet")
-    public R validateAndGet(@RequestBody UserAccount userAccount)
-    {
-        UserAccount sqlUser = userAccountService.selectUserBy3P(userAccount);
-        if (sqlUser!=null)
+        String token=getTokenFromHeader(request);
+        UserAccount userAccount = (UserAccount) userAccountService.getRByToken(token).getData();
+        if (userAccount==null)
         {
-            System.out.println(sqlUser);
-            sqlUser.clearSensitiveness();
-            return R.success(null,sqlUser);
+            return R.error();
         }
-        return R.error();
+        userAccount.setHollow(1);
+        userAccountService.setToken(token,userAccount);
+        return userAccountService.updateUserAccount(userAccount);
     }
+
 
     @CrossOrigin
     @PostMapping("/api/user/getByToken")
     public R getUserByToken(HttpServletRequest request)
     {
-        String token=request.getHeader("userToken");
-        return userAccountService.getByToken(token);
+        return userAccountService.getRByToken(getTokenFromHeader(request));
     }
 
 
@@ -143,15 +130,22 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/api/user/changeNickname")
-    public R changeNickname(@RequestBody UserAccount userAccount)
+    public R changeNickname(@RequestBody UserAccount userAccount,HttpServletRequest request)
     {
-        return userAccountService.changeUserNickname(userAccount);
+        String token=getTokenFromHeader(request);
+        //该userAccount已经更改过nickname
+        UserAccount redis= userAccountService.getUserByToken(token);
+        redis.setNickname(userAccount.getNickname());
+        userAccountService.setToken(token,redis);
+        return userAccountService.changeUserNickname(redis);
     }
     @CrossOrigin
     @PostMapping("/api/user/verifyUsername")
-    public R verifyUsername(@RequestBody UserAccount userAccount)
+    public R verifyUsername(@RequestBody String name)
     {
-        UserAccount saved=userAccountService.selectUserAccountByUsername(userAccount.getUsername());
+
+        name=name.replace("\"","");
+        UserAccount saved=userAccountService.selectUserAccountByUsername(name);
         return saved==null?R.success():R.error();
 
     }
@@ -173,4 +167,10 @@ public class UserController {
         return userAccountService.selectAllUserAccount();
     }
 
+
+
+    public String getTokenFromHeader(HttpServletRequest request)
+    {
+        return request.getHeader("userToken");
+    }
 }

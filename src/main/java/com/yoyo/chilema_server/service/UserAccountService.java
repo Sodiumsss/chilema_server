@@ -2,9 +2,6 @@ package com.yoyo.chilema_server.service;
 
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.pojo.UserAccount;
-import org.apache.catalina.User;
-
-import javax.servlet.http.HttpServletResponse;
 
 public interface UserAccountService {
     R addUserAccount(UserAccount userAccount);
@@ -25,10 +22,9 @@ public interface UserAccountService {
     R deleteUserAccountByUN(String username);
     R deleteUserAccountById(Long id);
     R changeUserNickname(UserAccount userAccount);
-
-
-    R getByToken(String token);
-
-
+    R getRByToken(String token);
+    UserAccount getUserByToken(String token);
     boolean verify(String token);
+
+    void setToken(String token,UserAccount userAccount);
 }

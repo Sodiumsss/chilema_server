@@ -24,30 +24,13 @@ public class ControllerAspect {
     {
         String funcName=jp.getSignature().getName();
         Date date = new Date();
-
-        if (!funcName.equals("validateAndGet"))
-        {
-            System.out.println(date +"  MethodStart："+funcName);
-        }
-        else
-        {
-            Object[] args= jp.getArgs();
-            UserAccount userAccount= (UserAccount) args[0];
-            System.out.println( date+"  validateAndGet("+userAccount.getUsername()+")");
-
-        }
-
-
+        System.out.println(date +" Start："+funcName);
     }
     @AfterReturning("Pointcut()")
     public void AfterReturn(JoinPoint jp)
     {
-        if (!jp.getSignature().getName().equals("validateAndGet"))
-        {
-            Date date = new Date();
-            System.out.println(date+"  MethodEnd："+jp.getSignature().getName());
-        }
-
+        Date date = new Date();
+        System.out.println(date+" End："+ jp.getSignature().getName());
     }
 
 
