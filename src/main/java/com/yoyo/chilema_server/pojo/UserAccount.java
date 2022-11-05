@@ -48,6 +48,7 @@ UserAccount {
 
     public void clearSensitiveness()
     {
+        this.password=null;
         this.schoolId=null;
         this.birthYear=null;
     }

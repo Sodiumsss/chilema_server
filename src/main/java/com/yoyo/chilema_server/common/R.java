@@ -32,6 +32,9 @@ public class R {
         r.setData(data);
         return r;
     }
+    public static R success(Object data) {
+        return success(null,data);
+    }
 
     public static R error(String message) {
         R r = success(message);

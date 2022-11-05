@@ -27,13 +27,13 @@ public class ControllerAspect {
 
         if (!funcName.equals("validateAndGet"))
         {
-            System.out.println(date +"|MethodStart："+funcName);
+            System.out.println(date +"  MethodStart："+funcName);
         }
         else
         {
             Object[] args= jp.getArgs();
             UserAccount userAccount= (UserAccount) args[0];
-            System.out.println( date+"|validateAndGet("+userAccount.getUsername()+")");
+            System.out.println( date+"  validateAndGet("+userAccount.getUsername()+")");
 
         }
 
@@ -45,7 +45,7 @@ public class ControllerAspect {
         if (!jp.getSignature().getName().equals("validateAndGet"))
         {
             Date date = new Date();
-            System.out.println(date+"|MethodEnd："+jp.getSignature().getName());
+            System.out.println(date+"  MethodEnd："+jp.getSignature().getName());
         }
 
     }

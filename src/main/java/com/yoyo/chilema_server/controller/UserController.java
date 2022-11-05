@@ -7,10 +7,15 @@ import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.FavorService;
 import com.yoyo.chilema_server.service.UserAccountService;
 import com.yoyo.chilema_server.utils.JsonUtils;
+import com.yoyo.chilema_server.utils.RedisUtils;
 import com.yoyo.chilema_server.utils.RequestDataUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -18,6 +23,8 @@ public class UserController {
     @Resource
     private UserAccountService userAccountService;
 
+    @Resource
+    RedisUtils redisUtils;
     @Resource
     private FavorService favorService;
 
@@ -73,12 +80,12 @@ public class UserController {
     public R updateUser(@RequestBody UserAccount userAccount) {
         return userAccountService.updateUserAccount(userAccount);
     }
-    @CrossOrigin
-    @PostMapping("/api/user/login")
-    public R login(@RequestBody UserAccount userAccount)
-    {
-        return userAccountService.login(userAccount);
-    }
+//    @CrossOrigin
+//    @PostMapping("/api/user/login")
+//    public R login(@RequestBody UserAccount userAccount)
+//    {
+//        return userAccountService.login(userAccount);
+//    }
     @CrossOrigin
     @PostMapping("/api/user/joinHollow")
     public R joinHollow(@RequestBody UserAccount userAccount)
@@ -100,6 +107,14 @@ public class UserController {
             return R.success(null,sqlUser);
         }
         return R.error();
+    }
+
+    @CrossOrigin
+    @PostMapping("/api/user/getByToken")
+    public R getUserByToken(HttpServletRequest request)
+    {
+        String token=request.getHeader("userToken");
+        return userAccountService.getByToken(token);
     }
 
 
@@ -140,6 +155,15 @@ public class UserController {
         return saved==null?R.success():R.error();
 
     }
+
+    @CrossOrigin
+    @PostMapping("/api/user/login")
+    public R login(@RequestBody UserAccount userAccount)
+    {
+        return userAccountService.Login(userAccount);
+    }
+
+
 
 
     @CrossOrigin
