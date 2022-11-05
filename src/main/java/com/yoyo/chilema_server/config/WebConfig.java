@@ -14,7 +14,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(userTokenInterceptor).addPathPatterns("/api/user/**").addPathPatterns("/api/hollow/**");
-
+        registry.addInterceptor(userTokenInterceptor)
+                .addPathPatterns("/api/user/login")
+                .addPathPatterns("/api/hollow/**").addPathPatterns("/api/user/verifyUsername")
+                .addPathPatterns("/api/user/verifyUsername")
+                .addPathPatterns("/api/user/changeNickname")
+                .addPathPatterns("/api/user/forgetPW")
+                .addPathPatterns("/api/user/getByToken")
+                .addPathPatterns("/api/user/joinHollow")
+                .addPathPatterns("/api/user/create");
     }
 }
