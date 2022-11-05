@@ -1,6 +1,8 @@
 package com.yoyo.chilema_server.pojo;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class HollowThread {
 
-    @TableId(type = IdType.AUTO)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;//帖子ID
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;//user_name表中id作为外键
     private String senderName;//发送人的名字(该字段可以由user更改，但不等同于nickname)
     private String title;//标题

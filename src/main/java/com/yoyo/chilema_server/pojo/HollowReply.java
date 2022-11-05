@@ -2,6 +2,8 @@ package com.yoyo.chilema_server.pojo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +15,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class HollowReply
 {
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;//回复id
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;//user_name表中id作为外键
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long threadId;//帖子id
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;//创建时间
