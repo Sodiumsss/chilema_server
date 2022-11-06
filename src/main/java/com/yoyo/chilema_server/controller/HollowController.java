@@ -44,6 +44,12 @@ public class HollowController {
     {//不需要传递Text，也不需要传递userid，get方法已清洗数据
         return hollowThreadService.getHollowByAsc(page);
     }
+    @CrossOrigin
+    @PostMapping("/api/hollow/getSingleHollow")
+    R getSingleHollow(@RequestBody Long id)
+    {//不需要传递Text，也不需要传递userid，get方法已清洗数据
+        return hollowThreadService.getSingleHollow(id);
+    }
 
     public String getTokenFromHeader(HttpServletRequest request)
     {

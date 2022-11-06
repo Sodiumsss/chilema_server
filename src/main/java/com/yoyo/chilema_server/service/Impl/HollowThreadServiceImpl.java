@@ -52,6 +52,18 @@ public class HollowThreadServiceImpl implements HollowThreadService {
         }
         return R.success(null,list);
     }
+
+    @Override
+    public R getSingleHollow(Long id) {
+
+       HollowThread hollowThread= hollowThreadMapper.selectById(id);
+       if (hollowThread!=null)
+       {
+           return R.success(hollowThread);
+       }
+       return R.error();
+    }
+
     @Override
     public R deleteById(Long id) {
         if(hollowThreadMapper.deleteById(id) > 0) {

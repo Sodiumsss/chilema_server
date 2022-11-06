@@ -14,9 +14,11 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class HollowThread {
 
     @JsonSerialize(using = ToStringSerializer.class)
+    @TableId(type = IdType.AUTO)
     private Long id;//帖子ID
     @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;//user_name表中id作为外键
