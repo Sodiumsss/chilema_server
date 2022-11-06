@@ -205,19 +205,13 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         try {
             UserAccount saved = userAccountMapper.selectOne(queryWrapper);
-            if (userAccount.getPassword().equals(saved.getPassword()))
-            {
-                saved.setNickname(userAccount.getNickname());
-
-                return updateUserAccount(saved);
-            }
+            saved.setNickname(userAccount.getNickname());
+            return updateUserAccount(saved);
         }catch (Exception e)
         {
             e.printStackTrace();
             return R.error();
         }
-
-        return  R.error();
     }
 
 
