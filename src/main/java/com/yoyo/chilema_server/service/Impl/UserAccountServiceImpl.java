@@ -105,16 +105,17 @@ public class UserAccountServiceImpl implements UserAccountService {
                 String mapToken=usernameToToken.getUsernameToToken().get(saved.getUsername());
                 if (mapToken==null)
                 {
-                    System.out.println("第一次登录！");
+                    System.out.println("第一次登录！"+"生成："+token);
                     redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
                     usernameToToken.getUsernameToToken().put(saved.getUsername(),token);//放入
                 }
                 else
                 {//已经有人登录过这个账户，把之前那个人的token删掉
-                    System.out.println("重复登录！删除："+mapToken);
-                    redisUtils.delete(COOKIE_NAME_TOKEN+"::"+mapToken);
-                    redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
 
+                    redisUtils.delete(COOKIE_NAME_TOKEN+"::"+mapToken);
+                    System.out.println("重复登录！删除："+mapToken+"更换为："+token);
+                    usernameToToken.getUsernameToToken().put(saved.getUsername(), token);
+                    redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
                 }
 
                 return R.success(token,TOKEN_EXPIRE);

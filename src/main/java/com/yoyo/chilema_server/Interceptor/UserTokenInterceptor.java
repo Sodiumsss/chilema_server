@@ -42,7 +42,7 @@ public class UserTokenInterceptor implements HandlerInterceptor
             return true;
         }
 
-        System.out.println(userAccountService.verify(token)+"|"+token);
+        System.out.println("inRedis:"+userAccountService.verify(token)+"|"+token);
         //验证
         return userAccountService.verify(token);
     }
