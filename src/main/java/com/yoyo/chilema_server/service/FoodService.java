@@ -5,4 +5,10 @@ import com.yoyo.chilema_server.pojo.Food;
 
 public interface FoodService {
     R addFood(Food food);
+    R deleteFoodById(Long id);
+    R updateFood(Food food);
+
+    R selectFoodList();
+    R selectFoodListById(Long id);
+    R selectFoodListByName(String name);
 }

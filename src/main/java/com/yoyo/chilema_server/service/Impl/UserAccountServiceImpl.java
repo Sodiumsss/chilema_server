@@ -40,27 +40,27 @@ public class UserAccountServiceImpl implements UserAccountService {
     public R addUserAccount(UserAccount userAccount) {
         userAccount.setCredit(0);
         if(userAccountMapper.insert(userAccount) > 0) {
-            return  R.success();
+            return  R.success("添加成功");
         } else {
-            return  R.error();
+            return  R.error("添加失败");
         }
     }
 
     @Override
     public R deleteUserAccount(UserAccount userAccount) {
         if(userAccountMapper.deleteById(userAccount.getId()) > 0) {
-            return  R.success();
+            return  R.success("删除成功");
         } else {
-            return  R.error();
+            return  R.error("删除失败");
         }
     }
 
     @Override
     public R updateUserAccount(UserAccount userAccount) {
         if(userAccountMapper.updateById(userAccount) > 0) {
-            return  R.success();
+            return  R.success("更新成功");
         } else {
-            return  R.error();
+            return  R.error("更新失败");
         }
     }
 
@@ -225,9 +225,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public R deleteUserAccountById(Long id) {
         if(userAccountMapper.deleteById(id) > 0) {
-            return R.success();
+            return R.success("删除成功");
         } else {
-            return R.error();
+            return R.error("删除失败");
         }
     }
 }

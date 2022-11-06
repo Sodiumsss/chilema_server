@@ -1,11 +1,10 @@
 package com.yoyo.chilema_server.controller;
 
 import com.yoyo.chilema_server.common.R;
+import com.yoyo.chilema_server.pojo.Food;
 import com.yoyo.chilema_server.service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @description: TODO
@@ -23,5 +22,28 @@ public class FoodController {
     @GetMapping("/api/food/test")
     public R test() {
         return R.success("hello2");
+    }
+
+    @PostMapping("/api/food/getList")
+    @CrossOrigin
+    public R getFoodList() {
+        return foodService.selectFoodList();
+    }
+
+    @PostMapping("/api/food/add")
+    @CrossOrigin
+    public R addFood(@RequestBody Food food) {
+        return foodService.addFood(food);
+    }
+
+    @PostMapping("/api/food/delete")
+    @CrossOrigin
+    public R deleteFood(@RequestBody Long id) {
+        return foodService.deleteFoodById(id);
+    }
+
+    @PostMapping("/api/food/update")
+    public R updateFood(@RequestBody Food food) {
+        return foodService.updateFood(food);
     }
 }
