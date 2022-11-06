@@ -6,6 +6,10 @@ import com.yoyo.chilema_server.pojo.Food;
 import com.yoyo.chilema_server.service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @description: TODO
@@ -61,4 +65,24 @@ public class FoodServiceImpl implements FoodService {
     public R selectFoodListByName(String name) {
         return null;
     }
+
+    @Override
+    public R uploadImg(MultipartFile file) {
+        String fileName = System.currentTimeMillis() + file.getOriginalFilename();
+        String filePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "img" + System.getProperty("file.separator") + "foodPic";
+        File realFile = new File(filePath);
+        if(!realFile.exists()) {
+            realFile.mkdir();
+        }
+        File dest = new File(filePath + System.getProperty("file.separator") + fileName);
+        String imgPath = "/img/foodPic/" + fileName;
+        try {
+            file.transferTo(dest);
+            return R.success(imgPath);
+        } catch (IOException e) {
+            return R.error("上传失败");
+        }
+    }
+
+
 }

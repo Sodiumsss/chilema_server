@@ -25,6 +25,7 @@ public class Food {
     private int spicy;
     private int pepper;
     private int oil;
+    private int salt;
     private String supplyTime;
     private String pic;
     private String description;

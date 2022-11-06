@@ -2,6 +2,7 @@ package com.yoyo.chilema_server.service;
 
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.pojo.Food;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface FoodService {
     R addFood(Food food);
@@ -11,4 +12,6 @@ public interface FoodService {
     R selectFoodList();
     R selectFoodListById(Long id);
     R selectFoodListByName(String name);
+
+    R uploadImg(MultipartFile file);
 }
