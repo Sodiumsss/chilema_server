@@ -48,6 +48,13 @@ public class FoodController {
     public R updateFood(@RequestBody Food food) {
         return foodService.updateFood(food);
     }
+    @PostMapping("/api/food/getSingleFood")
+    @CrossOrigin
+    public R getSingleFood(@RequestBody Long foodId)
+    {
+        System.out.println(foodId);
+        return foodService.selectFoodById(foodId);
+    }
 
     @PostMapping("/api/food/upload")
     @CrossOrigin
@@ -64,4 +71,7 @@ public class FoodController {
         food.setPic(uploadImg.getMessage());
         return foodService.updateFood(food);
     }
+
+
+
 }

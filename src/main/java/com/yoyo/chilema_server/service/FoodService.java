@@ -10,7 +10,7 @@ public interface FoodService {
     R updateFood(Food food);
 
     R selectFoodList();
-    R selectFoodListById(Long id);
+    R selectFoodById(Long id);
     R selectFoodListByName(String name);
 
     R uploadImg(MultipartFile file);
