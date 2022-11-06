@@ -45,6 +45,7 @@ public class HollowThreadServiceImpl implements HollowThreadService {
         IPage<HollowThread> iPage=new Page<>(page,5);
         QueryWrapper<HollowThread> queryWrapper =new QueryWrapper<>();
         queryWrapper.select().orderByDesc("create_time");
+        String size=String.valueOf(hollowThreadMapper.selectCount(null));
         iPage=hollowThreadMapper.selectPage(iPage,queryWrapper);
         List<HollowThread> list = iPage.getRecords();
         for (HollowThread i :list)
@@ -74,7 +75,7 @@ public class HollowThreadServiceImpl implements HollowThreadService {
                 i.setLikes(0);
             }
         }
-        return R.success(null,list);
+        return R.success(size,list);
     }
     @Override
     public R getHollowByAsc(Integer page) {

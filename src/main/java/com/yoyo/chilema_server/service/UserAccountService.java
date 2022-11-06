@@ -9,9 +9,6 @@ public interface UserAccountService {
     R updateUserAccount(UserAccount userAccount);
     R selectAllUserAccount();
     R selectUserAccountById(Long id);
-//
-//    R login(UserAccount userAccount);
-
 
     R Login(UserAccount userAccount);
 

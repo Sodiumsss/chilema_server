@@ -19,8 +19,6 @@ public class UserController {
     private UserAccountService userAccountService;
 
     @Resource
-    RedisUtils redisUtils;
-    @Resource
     private FavorService favorService;
 
     @PostMapping("/api/user/create")

@@ -17,7 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(userTokenInterceptor)
                 .addPathPatterns("/api/user/login")
-                .addPathPatterns("/api/hollow/**").addPathPatterns("/api/user/verifyUsername")
+                .addPathPatterns("/api/hollow/**")
+                .addPathPatterns("/api/user/verifyUsername")
                 .addPathPatterns("/api/user/verifyUsername")
                 .addPathPatterns("/api/user/changeNickname")
                 .addPathPatterns("/api/user/forgetPW")
