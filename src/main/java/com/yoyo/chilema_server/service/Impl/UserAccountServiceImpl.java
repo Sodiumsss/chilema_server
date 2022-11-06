@@ -74,25 +74,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         return R.success("",userAccountMapper.selectById(id));
     }
 
-//    @Override
-//    public R login(UserAccount userAccount)
-//    {
-//        QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
-//        queryWrapper.eq("username",userAccount.getUsername());
-//        try {
-//            UserAccount saved = userAccountMapper.selectOne(queryWrapper);
-//            if (userAccount.getPassword().equals(saved.getPassword()))
-//            {
-//                return  R.success(saved.getNickname());
-//            }
-//        }catch (Exception e)
-//        {
-//            return R.error();
-//        }
-//
-//        return  R.error();
-//    }
-
     @Override
     public R Login(UserAccount userAccount) {
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
