@@ -21,7 +21,7 @@ public class HollowReply
     @TableId(type = IdType.AUTO)
     private Long id;//回复id
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long userId;//user_name表中id作为外键
+    private Long replyId;//user_name表中id作为外键
     @JsonSerialize(using = ToStringSerializer.class)
     private Long threadId;//帖子id
     @TableField(fill = FieldFill.INSERT)
