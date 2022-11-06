@@ -28,4 +28,37 @@ public class FoodServiceImpl implements FoodService {
             return R.error("添加失败");
         }
     }
+
+    @Override
+    public R deleteFoodById(Long id) {
+        if(foodMapper.deleteById(id) > 0) {
+            return R.success("删除成功");
+        } else {
+            return R.error("删除失败");
+        }
+    }
+
+    @Override
+    public R updateFood(Food food) {
+        if(foodMapper.updateById(food) > 0) {
+            return R.success("更新成功");
+        } else {
+            return R.error("更新失败");
+        }
+    }
+
+    @Override
+    public R selectFoodList() {
+        return R.success("",foodMapper.selectList(null));
+    }
+
+    @Override
+    public R selectFoodListById(Long id) {
+        return R.success("",foodMapper.selectById(id));
+    }
+
+    @Override
+    public R selectFoodListByName(String name) {
+        return null;
+    }
 }
