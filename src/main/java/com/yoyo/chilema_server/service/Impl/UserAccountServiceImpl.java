@@ -6,15 +6,13 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.mapper.UserAccountMapper;
 import com.yoyo.chilema_server.pojo.UserAccount;
+import com.yoyo.chilema_server.pojo.UsernameToToken;
 import com.yoyo.chilema_server.service.UserAccountService;
 import com.yoyo.chilema_server.utils.RedisUtils;
-import io.netty.util.internal.StringUtil;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -30,6 +28,8 @@ public class UserAccountServiceImpl implements UserAccountService {
     UserAccountMapper userAccountMapper;
     @Autowired
     RedisUtils redisUtils;
+    @Autowired
+    UsernameToToken usernameToToken;
 
     //token过期时间：2天
     public static final int TOKEN_EXPIRE = 3600 * 24 * 2;
@@ -101,8 +101,22 @@ public class UserAccountServiceImpl implements UserAccountService {
             UserAccount saved = userAccountMapper.selectOne(queryWrapper);
             if (userAccount.getPassword().equals(saved.getPassword()))
             {
-                String token= UUID.randomUUID().toString().replace("-","");
-                redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
+                String token=UUID.randomUUID().toString().replace("-","");
+                String mapToken=usernameToToken.getUsernameToToken().get(saved.getUsername());
+                if (mapToken==null)
+                {
+                    System.out.println("第一次登录！");
+                    redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
+                    usernameToToken.getUsernameToToken().put(saved.getUsername(),token);//放入
+                }
+                else
+                {//已经有人登录过这个账户，把之前那个人的token删掉
+                    System.out.println("重复登录！删除："+mapToken);
+                    redisUtils.delete(COOKIE_NAME_TOKEN+"::"+mapToken);
+                    redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
+
+                }
+
                 return R.success(token,TOKEN_EXPIRE);
             }
         }catch (Exception e)
@@ -126,7 +140,6 @@ public class UserAccountServiceImpl implements UserAccountService {
             return R.error();
         }
         UserAccount userAccount= JSON.parseObject(json,UserAccount.class);
-        redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(userAccount),TOKEN_EXPIRE);//重置有效期
         userAccount.clearSensitiveness();
         return R.success(userAccount);//清除敏感信息后返回R，但redis中保留所有信息
 

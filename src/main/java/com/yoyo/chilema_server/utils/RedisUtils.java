@@ -23,6 +23,11 @@ public class RedisUtils {
     {
        return stringRedisTemplate.expire(key, timeout, TimeUnit.SECONDS);
     }
+    public void init() //删除key
+    {
+        Set<String> keys=redisTemplate.keys("Acc::"+"*");
+        redisTemplate.delete(keys);
+    }
 
     public Boolean delete(String key) //删除key
     {
@@ -37,6 +42,8 @@ public class RedisUtils {
     {
         stringRedisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
     }
+
+
     public String get(String key)
     {
         return stringRedisTemplate.opsForValue().get(key);

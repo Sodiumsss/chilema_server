@@ -8,6 +8,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 public class UserTokenInterceptor implements HandlerInterceptor
@@ -40,6 +42,7 @@ public class UserTokenInterceptor implements HandlerInterceptor
             return true;
         }
 
+        System.out.println(userAccountService.verify(token)+"|"+token);
         //验证
         return userAccountService.verify(token);
     }
