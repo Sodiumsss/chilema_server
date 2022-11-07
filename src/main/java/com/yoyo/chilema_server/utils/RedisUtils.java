@@ -1,5 +1,7 @@
 package com.yoyo.chilema_server.utils;
 
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -8,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+
+@Slf4j
 @Component
 public class RedisUtils {
     @Autowired
@@ -27,6 +31,8 @@ public class RedisUtils {
     {
         Set<String> keys=redisTemplate.keys("Acc::"+"*");
         redisTemplate.delete(keys);
+        log.info("已经删除所有用户token");
+
     }
 
     public Boolean delete(String key) //删除key

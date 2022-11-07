@@ -44,6 +44,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.2</version>
+            <exclusions><!-- 去掉默认日志配置logback -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -64,6 +70,7 @@
             <version>2.7.5</version>
         </dependency>
 
+
     </dependencies>
 
     <build>
@@ -74,5 +81,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

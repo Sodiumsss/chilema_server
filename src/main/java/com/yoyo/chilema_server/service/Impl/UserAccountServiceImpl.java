@@ -9,10 +9,10 @@ import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.pojo.UsernameToToken;
 import com.yoyo.chilema_server.service.UserAccountService;
 import com.yoyo.chilema_server.utils.RedisUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -22,6 +22,7 @@ import java.util.UUID;
  * @package: com.yoyo.chilema_server.service.Impl
  * @Version: 1.0
  */
+@Slf4j
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
     @Autowired
@@ -31,9 +32,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Autowired
     UsernameToToken usernameToToken;
 
-    //token过期时间：2天
-    public static final int TOKEN_EXPIRE = 3600 * 24 * 2;
-    //前缀
+    //token过期时间：1天(86400秒)
+    public static final int TOKEN_EXPIRE = 3600 * 24 ;
+    //用户token前缀
     public static final String COOKIE_NAME_TOKEN = "Acc";
 
     @Override
@@ -75,31 +76,31 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public R Login(UserAccount userAccount) {
+    public R Login(UserAccount userAccount)
+    {
+        final String username = userAccount.getUsername();
         QueryWrapper<UserAccount> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("username",userAccount.getUsername());
+
+        queryWrapper.eq("username",username);
         try {
-            UserAccount saved = userAccountMapper.selectOne(queryWrapper);
+            UserAccount saved = userAccountMapper.selectOne(queryWrapper);//从数据库中拿到与用户名对应的用户列，为空直接抛异常
             if (userAccount.getPassword().equals(saved.getPassword()))
             {
-                String token=UUID.randomUUID().toString().replace("-","");
-                String mapToken=usernameToToken.getUsernameToToken().get(saved.getUsername());
+                String token=UUID.randomUUID().toString().replace("-","");//生成唯一token
+                String mapToken=usernameToToken.getUsernameToToken().get(username);//从HashMap中取到与用户名对应value
                 if (mapToken==null)
-                {
-                    System.out.println("第一次登录！"+"生成："+token);
-                    redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
-                    usernameToToken.getUsernameToToken().put(saved.getUsername(),token);//放入
+                {//为空表示该用户未登录
+                    usernameToToken.getUsernameToToken().put(username,token);//放入
                 }
                 else
-                {//已经有人登录过这个账户，把之前那个人的token删掉
-
+                {//已经有人登录过这个账户，把之前那个人的token删掉，并把新token放入map与redis中
                     redisUtils.delete(COOKIE_NAME_TOKEN+"::"+mapToken);
-                    System.out.println("重复登录！删除："+mapToken+"更换为："+token);
                     usernameToToken.getUsernameToToken().put(saved.getUsername(), token);
-                    redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
+                    log.info("重复登录！删除："+mapToken+"更换为："+token);
                 }
-
-                return R.success(token,TOKEN_EXPIRE);
+                redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(saved),TOKEN_EXPIRE);
+                saved.clearSensitiveness();
+                return R.success(token,saved);//给客户端返回token与脱敏过后的用户信息
             }
         }catch (Exception e)
         {
@@ -111,20 +112,25 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public R getRByToken(String token)
-    {
+    {//方法内未实现redis与sql中的用户信息对比，需要在修改处自行更新redis
         if(StringUtils.isEmpty(token))
         {
+            log.warn("空token");
             return R.error();
         }
-        String json =redisUtils.get(COOKIE_NAME_TOKEN+"::"+token);
-        if (json==null)
+        try
         {
+            String json =redisUtils.get(COOKIE_NAME_TOKEN+"::"+token);
+            log.info(token+"请求到用户JSON");
+            UserAccount redisAccount= JSON.parseObject(json,UserAccount.class);
+            redisAccount.clearSensitiveness();
+            return R.success(redisAccount);//清除敏感信息后返回R，但redis中保留所有信息
+        }
+        catch (Exception e)
+        {
+            log.warn("redis不存在token为"+token+"的信息");
             return R.error();
         }
-        UserAccount userAccount= JSON.parseObject(json,UserAccount.class);
-        userAccount.clearSensitiveness();
-        return R.success(userAccount);//清除敏感信息后返回R，但redis中保留所有信息
-
     }
 
     @Override
@@ -134,7 +140,6 @@ public class UserAccountServiceImpl implements UserAccountService {
             return null;
         }
         String json =redisUtils.get(COOKIE_NAME_TOKEN+"::"+token);
-        System.out.println(token+"|"+json);
         if (json==null)
         {
             return null;
@@ -154,8 +159,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public void setToken(String token, UserAccount userAccount) {
-        redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(userAccount),TOKEN_EXPIRE);//更新并重置有效期
+    public void setToken(String token, UserAccount userAccount)
+    {
+        redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(userAccount),TOKEN_EXPIRE);//存入redis
     }
 
     @Override
@@ -166,7 +172,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         {
             return userAccountMapper.selectOne(queryWrapper);
         }catch (Exception ignored) {}
-
         return null;
     }
 
@@ -201,6 +206,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         try {
             UserAccount saved = userAccountMapper.selectOne(queryWrapper);
             saved.setNickname(userAccount.getNickname());
+            setToken(usernameToToken.getUsernameToToken().get(saved.getUsername()),saved);
             return updateUserAccount(saved);
         }catch (Exception e)
         {

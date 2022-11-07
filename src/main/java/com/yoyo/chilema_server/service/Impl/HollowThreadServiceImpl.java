@@ -77,43 +77,10 @@ public class HollowThreadServiceImpl implements HollowThreadService {
         }
         return R.success(size,list);
     }
-    @Override
-    public R getHollowByAsc(Integer page) {
-        IPage<HollowThread> iPage=new Page<>(page,5);
-        iPage=hollowThreadMapper.selectPage(iPage,null);
-        List<HollowThread> list = iPage.getRecords();
-        for (HollowThread i :list)
-        {
-            i.setText(null);
-            i.setUserId(null);
-            String threadClicks=redisUtils.get(HollowClickNumber+i.getId());
-            Long threadLikes=redisUtils.sSize(HollowStarSet+i.getId());
-            if (threadClicks!=null)
-            {
-                Integer clicks=Integer.parseInt(threadClicks);
-                i.setClicks(clicks);
-            }
-            else
-            {
-                i.setClicks(0);
-            }
-            if (threadLikes!=null)
-            {
-                Integer likes= Math.toIntExact(threadLikes);
-                i.setLikes(likes);
-            }
-            else
-            {
-                i.setClicks(0);
-                i.setLikes(0);
-            }
-        }
-        return R.success(null,list);
-    }
+
 
     @Override
     public R getSingleHollow(Long tid,Long userId) {
-       System.out.println(tid+"|"+userId);
        HollowThread hollowThread= hollowThreadMapper.selectById(tid);
        if (hollowThread!=null)
        {
@@ -154,7 +121,6 @@ public class HollowThreadServiceImpl implements HollowThreadService {
     @Override
     public R setLike(Long tid,Long userId) {
        Long state= redisUtils.sAdd(HollowStarSet+tid, String.valueOf(userId));
-       System.out.println("Put:"+HollowStarSet+tid);
        if (state!=0)
        {
            return R.success();
@@ -165,7 +131,6 @@ public class HollowThreadServiceImpl implements HollowThreadService {
     @Override
     public R cancelLike(Long tid,Long userId) {
         Long state= redisUtils.sRemove(HollowStarSet+tid, String.valueOf(userId));
-        System.out.println("Pop:"+HollowStarSet+tid);
         if (state!=0)
         {
             return R.success();

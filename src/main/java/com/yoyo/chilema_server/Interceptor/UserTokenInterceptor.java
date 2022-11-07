@@ -1,6 +1,7 @@
 package com.yoyo.chilema_server.Interceptor;
 
 import com.yoyo.chilema_server.service.UserAccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -8,17 +9,13 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
-import java.util.Set;
-
+@Slf4j
 @Component
 public class UserTokenInterceptor implements HandlerInterceptor
 {
 
-
     @Resource
     UserAccountService userAccountService;
-
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, @NotNull Object handler) {
@@ -42,9 +39,11 @@ public class UserTokenInterceptor implements HandlerInterceptor
             return true;
         }
 
-        System.out.println("inRedis:"+userAccountService.verify(token)+"|"+token);
+
         //验证
-        return userAccountService.verify(token);
+        boolean inRedis=userAccountService.verify(token);
+        log.info("RequestPass:"+inRedis+"|"+token);
+        return inRedis;
     }
 
 }

@@ -40,12 +40,7 @@ public class HollowController {
     {//不需要传递Text，也不需要传递userid，get方法已清洗数据
         return hollowThreadService.getHollowByDesc(page);
     }
-    @CrossOrigin
-    @PostMapping("/api/hollow/getHollowByAsc")
-    R getHollowByAsc(@RequestBody Integer page)
-    {//不需要传递Text，也不需要传递userid，get方法已清洗数据
-        return hollowThreadService.getHollowByAsc(page);
-    }
+
     @CrossOrigin
     @PostMapping("/api/hollow/getSingleHollow")
     R getSingleHollow(@RequestBody UserIDWithHollowID userIDWithHollowID)
