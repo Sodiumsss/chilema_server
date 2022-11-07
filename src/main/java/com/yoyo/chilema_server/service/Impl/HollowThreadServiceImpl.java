@@ -44,7 +44,7 @@ public class HollowThreadServiceImpl implements HollowThreadService {
     public R getHollowByDesc(Integer page) {
         IPage<HollowThread> iPage=new Page<>(page,5);
         QueryWrapper<HollowThread> queryWrapper =new QueryWrapper<>();
-        queryWrapper.select().orderByDesc("create_time");
+        queryWrapper.select().orderByDesc("id");
         String size=String.valueOf(hollowThreadMapper.selectCount(null));
         iPage=hollowThreadMapper.selectPage(iPage,queryWrapper);
         List<HollowThread> list = iPage.getRecords();
@@ -55,24 +55,17 @@ public class HollowThreadServiceImpl implements HollowThreadService {
             String threadClicks=redisUtils.get(HollowClickNumber+i.getId());
             Long threadLikes=redisUtils.sSize(HollowStarSet+i.getId());
             i.setReply(getReplies(i.getId()).size());
+            i.setClicks(0);
+            i.setLikes(0);
             if (threadClicks!=null)
             {
                 Integer clicks=Integer.valueOf(threadClicks);
                 i.setClicks(clicks);
             }
-            else
-            {
-                i.setClicks(0);
-            }
             if (threadLikes!=null)
             {
                 Integer likes= Math.toIntExact(threadLikes);
                 i.setLikes(likes);
-            }
-            else
-            {
-                i.setClicks(0);
-                i.setLikes(0);
             }
         }
         return R.success(size,list);
