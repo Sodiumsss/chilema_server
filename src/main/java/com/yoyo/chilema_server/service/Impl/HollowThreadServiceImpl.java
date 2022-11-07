@@ -52,11 +52,11 @@ public class HollowThreadServiceImpl implements HollowThreadService {
         {
             i.setText(null);
             i.setUserId(null);
+            i.setClicks(0);
+            i.setLikes(0);
             String threadClicks=redisUtils.get(HollowClickNumber+i.getId());
             Long threadLikes=redisUtils.sSize(HollowStarSet+i.getId());
             i.setReply(getReplies(i.getId()).size());
-            i.setClicks(0);
-            i.setLikes(0);
             if (threadClicks!=null)
             {
                 Integer clicks=Integer.valueOf(threadClicks);
