@@ -24,4 +24,6 @@ public interface UserAccountService {
     boolean verify(String token);
 
     void setToken(String token,UserAccount userAccount);
+
+    R getUserCount();
 }

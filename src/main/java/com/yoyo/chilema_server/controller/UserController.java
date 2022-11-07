@@ -1,12 +1,11 @@
 package com.yoyo.chilema_server.controller;
 
 import com.yoyo.chilema_server.common.R;
-import com.yoyo.chilema_server.pojo.UserWithFavor;
+import com.yoyo.chilema_server.pojo.noSQL.UserWithFavor;
 import com.yoyo.chilema_server.pojo.Favor;
 import com.yoyo.chilema_server.pojo.UserAccount;
 import com.yoyo.chilema_server.service.FavorService;
 import com.yoyo.chilema_server.service.UserAccountService;
-import com.yoyo.chilema_server.utils.RedisUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -170,5 +169,11 @@ public class UserController {
     public String getTokenFromHeader(HttpServletRequest request)
     {
         return request.getHeader("userToken");
+    }
+
+    @CrossOrigin
+    @PostMapping("/api/user/count")
+    public R getUserCount() {
+        return userAccountService.getUserCount();
     }
 }

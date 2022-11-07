@@ -3,7 +3,7 @@ package com.yoyo.chilema_server.service;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.pojo.HollowReply;
 import com.yoyo.chilema_server.pojo.HollowThread;
-import com.yoyo.chilema_server.pojo.UserHollowText;
+import com.yoyo.chilema_server.pojo.noSQL.UserHollowText;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
 package com.yoyo.chilema_server.service.Impl;
 
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -9,8 +8,8 @@ import com.yoyo.chilema_server.mapper.HollowReplyMapper;
 import com.yoyo.chilema_server.mapper.HollowThreadMapper;
 import com.yoyo.chilema_server.pojo.HollowReply;
 import com.yoyo.chilema_server.pojo.HollowThread;
-import com.yoyo.chilema_server.pojo.HollowThreadWithReply;
-import com.yoyo.chilema_server.pojo.UserHollowText;
+import com.yoyo.chilema_server.pojo.noSQL.HollowThreadWithReply;
+import com.yoyo.chilema_server.pojo.noSQL.UserHollowText;
 import com.yoyo.chilema_server.service.HollowThreadService;
 import com.yoyo.chilema_server.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;

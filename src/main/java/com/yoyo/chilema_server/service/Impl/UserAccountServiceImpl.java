@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.mapper.UserAccountMapper;
 import com.yoyo.chilema_server.pojo.UserAccount;
-import com.yoyo.chilema_server.pojo.UsernameToToken;
+import com.yoyo.chilema_server.pojo.noSQL.UsernameToToken;
 import com.yoyo.chilema_server.service.UserAccountService;
 import com.yoyo.chilema_server.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -224,5 +224,10 @@ public class UserAccountServiceImpl implements UserAccountService {
         } else {
             return R.error("删除失败");
         }
+    }
+
+    @Override
+    public R getUserCount() {
+        return R.success("查询成功",userAccountMapper.selectCount(null));
     }
 }

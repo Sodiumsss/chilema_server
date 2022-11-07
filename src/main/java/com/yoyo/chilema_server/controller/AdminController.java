@@ -24,6 +24,7 @@ public class AdminController {
     @CrossOrigin
     public R login(String loginInfo) {
         Admin admin = JsonUtils.jsonToObj(loginInfo, Admin.class);
+
         return adminService.login(admin);
     }
 }

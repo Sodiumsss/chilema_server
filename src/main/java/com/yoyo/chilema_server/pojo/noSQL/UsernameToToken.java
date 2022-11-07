@@ -1,4 +1,4 @@
-package com.yoyo.chilema_server.pojo;
+package com.yoyo.chilema_server.pojo.noSQL;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;

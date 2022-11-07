@@ -1,4 +1,4 @@
-package com.yoyo.chilema_server.pojo;
+package com.yoyo.chilema_server.pojo.noSQL;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
