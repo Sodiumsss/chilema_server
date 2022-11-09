@@ -16,6 +16,9 @@ public class ApplicationService implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        log.info("图片真实路径："+
+                System.getProperty("user.dir") + System.getProperty("file.separator") + "img" +
+                System.getProperty("file.separator") + "foodPic");
         redisUtils.init();
     }
 }

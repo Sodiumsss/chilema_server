@@ -24,6 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/user/forgetPW")
                 .addPathPatterns("/api/user/getByToken")
                 .addPathPatterns("/api/user/joinHollow")
+                .addPathPatterns("/api/food/getSingleFood")
                 .addPathPatterns("/api/user/create");
     }
 

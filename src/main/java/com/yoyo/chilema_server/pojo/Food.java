@@ -22,14 +22,14 @@ public class Food {
     @TableId(type = IdType.AUTO)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
-    private String name;
-    private int acid;
-    private int sweet;
-    private int spicy;
-    private int pepper;
-    private int oil;
-    private int salt;
-    private String supplyTime;
-    private String pic;
-    private String description;
+    private String name;//名称
+    private int acid;//酸
+    private int sweet;//甜
+    private int pepper;//麻
+    private int spicy;//辣
+    private int oil;//油
+    private int salt;//盐
+    private String supplyTime;//供应时间
+    private String pic;//图片链接
+    private String description;//简短描述
 }
