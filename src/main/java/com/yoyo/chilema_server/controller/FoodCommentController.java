@@ -1,7 +1,7 @@
 package com.yoyo.chilema_server.controller;
 
 import com.yoyo.chilema_server.common.R;
-import com.yoyo.chilema_server.service.CommentService;
+import com.yoyo.chilema_server.service.FoodCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version: 1.0
  */
 @RestController
-public class CommentController {
+public class FoodCommentController {
 
     @Autowired
-    private CommentService commentService;
+    private FoodCommentService foodCommentService;
 
     @GetMapping("/api/comment/test")
     public R test() {

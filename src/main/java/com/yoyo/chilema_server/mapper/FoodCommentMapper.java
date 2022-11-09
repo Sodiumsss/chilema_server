@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-public interface CommentMapper extends BaseMapper<FoodComment> {
+public interface FoodCommentMapper extends BaseMapper<FoodComment> {
 }
