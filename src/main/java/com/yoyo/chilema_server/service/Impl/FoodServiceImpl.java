@@ -4,6 +4,7 @@ import com.yoyo.chilema_server.common.R;
 import com.yoyo.chilema_server.mapper.FoodMapper;
 import com.yoyo.chilema_server.pojo.Food;
 import com.yoyo.chilema_server.service.FoodService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import java.io.IOException;
  * @Version: 1.0
  */
 @Service
+@Slf4j
 public class FoodServiceImpl implements FoodService {
 
     @Autowired
@@ -59,6 +61,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public R selectFoodById(Long id)
     {
+        log.info(String.valueOf(foodMapper.selectById(id)));
         return R.success(foodMapper.selectById(id));
     }
 

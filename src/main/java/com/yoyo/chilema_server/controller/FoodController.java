@@ -52,7 +52,6 @@ public class FoodController {
     @CrossOrigin
     public R getSingleFood(@RequestBody Long foodId)
     {
-        System.out.println(foodId);
         return foodService.selectFoodById(foodId);
     }
 
