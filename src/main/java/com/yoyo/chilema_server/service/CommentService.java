@@ -1,8 +1,8 @@
 package com.yoyo.chilema_server.service;
 
 import com.yoyo.chilema_server.common.R;
-import com.yoyo.chilema_server.pojo.Comment;
+import com.yoyo.chilema_server.pojo.FoodComment;
 
 public interface CommentService {
-    R addComment(Comment comment);
+    R addComment(FoodComment foodComment);
 }

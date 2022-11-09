@@ -29,12 +29,12 @@ public class Food {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     private String name;//名称
-    private int acid;//酸
-    private int sweet;//甜
-    private int pepper;//麻
-    private int spicy;//辣
-    private int oil;//油
-    private int salt;//盐
+    private Integer acid;//酸
+    private Integer sweet;//甜
+    private Integer pepper;//麻
+    private Integer spicy;//辣
+    private Integer oil;//油
+    private Integer salt;//盐
     private Float rate;//评分0~100
     private Float price;//价格
     @TableField(typeHandler = JacksonTypeHandler.class)
