@@ -9,14 +9,17 @@ import com.yoyo.chilema_server.mapper.HollowThreadMapper;
 import com.yoyo.chilema_server.pojo.HollowReply;
 import com.yoyo.chilema_server.pojo.HollowThread;
 import com.yoyo.chilema_server.pojo.noSQL.HollowThreadWithReply;
+import com.yoyo.chilema_server.pojo.noSQL.MyData;
 import com.yoyo.chilema_server.pojo.noSQL.UserHollowText;
 import com.yoyo.chilema_server.service.HollowThreadService;
 import com.yoyo.chilema_server.utils.RedisUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
-
+@Slf4j
 @Service
 public class HollowThreadServiceImpl implements HollowThreadService {
     @Autowired
@@ -25,6 +28,9 @@ public class HollowThreadServiceImpl implements HollowThreadService {
     private HollowReplyMapper hollowReplyMapper;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    MyData myData;
+
     public static final String HollowStarSet = "Star::Set::";//Star::Set::1111 (1111)为贴ID
     public static final String HollowClickNumber = "Click::Number::";//Click::Number::1111 (1111)为贴ID
 
@@ -33,6 +39,8 @@ public class HollowThreadServiceImpl implements HollowThreadService {
         if(hollowThreadMapper.insert(hollowThread) > 0)
         {
             redisUtils.set(HollowClickNumber+hollowThread.getId(),"0");
+            myData.setHollowSize(myData.getHollowSize()+1);
+            log.info("新发帖子，当前总帖子："+myData.getHollowSize());
             return  R.success();
         } else {
             return  R.error();
@@ -44,23 +52,28 @@ public class HollowThreadServiceImpl implements HollowThreadService {
         IPage<HollowThread> iPage=new Page<>(page,5);
         QueryWrapper<HollowThread> queryWrapper =new QueryWrapper<>();
         queryWrapper.select().orderByDesc("id");
-        String size=String.valueOf(hollowThreadMapper.selectCount(null));
+        HashMap<Long,Integer> hollowId_Replies=myData.getHollowId_Replies();
+
+        String size=String.valueOf(myData.getHollowSize());//帖子总数采用组件进行维护
+
         iPage=hollowThreadMapper.selectPage(iPage,queryWrapper);
         List<HollowThread> list = iPage.getRecords();
         for (HollowThread i :list)
         {
-            i.setText(null);
-            i.setUserId(null);
-            i.setClicks(0);
-            i.setLikes(0);
             String threadClicks=redisUtils.get(HollowClickNumber+i.getId());
             Long threadLikes=redisUtils.sSize(HollowStarSet+i.getId());
-            i.setReply(getReplies(i.getId()).size());
+
+            Integer replies= hollowId_Replies.get(i.getId());
+            if (replies!=null)
+            {
+                i.setReply(replies);
+            }
             if (threadClicks!=null)
             {
                 Integer clicks=Integer.valueOf(threadClicks);
                 i.setClicks(clicks);
             }
+
             if (threadLikes!=null)
             {
                 Integer likes= Math.toIntExact(threadLikes);
@@ -99,6 +112,8 @@ public class HollowThreadServiceImpl implements HollowThreadService {
     @Override
     public R deleteById(Long id) {
         if(hollowThreadMapper.deleteById(id) > 0) {
+            redisUtils.set(HollowClickNumber+id,"0");//直接设置为0，不删了
+            myData.setHollowSize(myData.getHollowSize()-1);//维护size
             return R.success();
         } else {
             return R.error();
@@ -146,6 +161,17 @@ public class HollowThreadServiceImpl implements HollowThreadService {
         hollowReply.setSenderName(userHollowText.getSenderName());
         if (hollowReplyMapper.insert(hollowReply)>0)
         {
+            Integer replies= myData.getHollowId_Replies().get(userHollowText.getThreadID());
+            HashMap<Long,Integer> hashMap= myData.getHollowId_Replies();
+            if (replies==null)
+            {
+                hashMap.put(userHollowText.getThreadID(), 1);
+            }
+            else
+            {
+                hashMap.put(userHollowText.getThreadID(),replies+ 1);
+            }
+            myData.setHollowId_Replies(hashMap);
            return R.success();
         }
         return R.error();
