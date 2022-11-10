@@ -8,10 +8,8 @@ public interface FoodService {
     R addFood(Food food);
     R deleteFoodById(Long id);
     R updateFood(Food food);
-
     R selectFoodList();
     R selectFoodById(Long id);
     R selectFoodListByName(String name);
-
     R uploadImg(MultipartFile file);
 }

@@ -110,12 +110,27 @@ public class HollowThreadServiceImpl implements HollowThreadService {
     }
 
     @Override
-    public R deleteById(Long id) {
-        if(hollowThreadMapper.deleteById(id) > 0) {
-            redisUtils.set(HollowClickNumber+id,"0");//直接设置为0，不删了
+    public R deleteMyselfById(Long id) {
+
+        QueryWrapper<HollowReply> wrapper = new QueryWrapper<>();
+        wrapper.eq("thread_id",id);
+        List<HollowReply> list = hollowReplyMapper.selectList(wrapper);
+        for (HollowReply i : list)
+        {
+            hollowReplyMapper.deleteById(i.getId());//先删评论
+        }
+        if(hollowThreadMapper.deleteById(id) > 0)//再删帖子
+        {
+            redisUtils.delete(HollowClickNumber+id);//删redis
+            redisUtils.delete(HollowStarSet+id);
             myData.setHollowSize(myData.getHollowSize()-1);//维护size
+            HashMap<Long ,Integer> hashMap = myData.getHollowId_Replies();//维护hashmap
+            hashMap.remove(id);
+            myData.setHollowId_Replies(hashMap);
             return R.success();
-        } else {
+        }
+        else
+        {
             return R.error();
         }
     }
@@ -172,6 +187,9 @@ public class HollowThreadServiceImpl implements HollowThreadService {
                 hashMap.put(userHollowText.getThreadID(),replies+ 1);
             }
             myData.setHollowId_Replies(hashMap);
+
+            HollowThread hollowThread = hollowThreadMapper.selectById(userHollowText.getThreadID());
+            hollowThreadMapper.updateById(hollowThread);
            return R.success();
         }
         return R.error();

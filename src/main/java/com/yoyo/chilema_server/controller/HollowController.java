@@ -47,6 +47,14 @@ public class HollowController {
     {
         return hollowThreadService.getSingleHollow(userIDWithHollowID.getHollowID(), userIDWithHollowID.getUserID());
     }
+
+    @CrossOrigin
+    @PostMapping("/api/hollow/deleteMyselfById")
+    R deleteMyselfById(@RequestBody Long id)
+    {
+        return hollowThreadService.deleteMyselfById(id);
+    }
+
     @CrossOrigin
     @PostMapping("/api/hollow/reply")
     R reply(@RequestBody UserHollowText userHollowText)

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface FoodCommentService {
     R addComment(FoodComment foodComment, HttpServletRequest request);
-
     R deleteMyselfComment (Long foodId,HttpServletRequest request);
     R getCommentList(Long id);
 }

@@ -11,7 +11,7 @@ public interface HollowThreadService {
     R post(HollowThread hollowThread);
     R getHollowByDesc(Integer page);
     R getSingleHollow(Long tid,Long userId);
-    R deleteById(Long id);
+    R deleteMyselfById(Long id);
     R edit(HollowThread hollowThread);
     R setLike(Long tid,Long userId);
     R cancelLike(Long tid,Long userId);
