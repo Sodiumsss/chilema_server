@@ -25,7 +25,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/user/getByToken")
                 .addPathPatterns("/api/user/joinHollow")
                 .addPathPatterns("/api/food/getSingleFood")
-                .addPathPatterns("/api/user/create");
+                .addPathPatterns("/api/user/create")
+                .addPathPatterns("/api/comment/add")
+                .addPathPatterns("/api/comment/get")
+                .addPathPatterns("/api/comment/deleteMyself")
+        ;
     }
 
     @Override

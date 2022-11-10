@@ -23,6 +23,9 @@ public interface UserAccountService {
     UserAccount getUserByToken(String token);
     boolean verify(String token);
 
+
+    void syncRedis();//将数据库中的数据覆盖至redis中
+
     void setToken(String token,UserAccount userAccount);
 
     R getUserCount();

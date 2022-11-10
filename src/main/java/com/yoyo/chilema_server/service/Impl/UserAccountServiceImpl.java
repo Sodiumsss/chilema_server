@@ -10,9 +10,13 @@ import com.yoyo.chilema_server.pojo.noSQL.UsernameToToken;
 import com.yoyo.chilema_server.service.UserAccountService;
 import com.yoyo.chilema_server.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -159,10 +163,27 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    public void syncRedis()
+    {
+      HashMap<String,String>a = usernameToToken.getUsernameToToken();//Username - Token
+
+        QueryWrapper<UserAccount> wrapper =new QueryWrapper<>();
+        a.forEach((key,value)->
+        {
+            wrapper.eq("username",key);
+            UserAccount userAccount = userAccountMapper.selectOne(wrapper);//得到了数据库中的user，准备更新到redis中
+            redisUtils.set(COOKIE_NAME_TOKEN+"::"+value,JSON.toJSONString(userAccount),TOKEN_EXPIRE);
+      });
+    }
+
+    @Override
     public void setToken(String token, UserAccount userAccount)
     {
         redisUtils.set(COOKIE_NAME_TOKEN+"::"+token, JSON.toJSONString(userAccount),TOKEN_EXPIRE);//存入redis
     }
+
+
+
 
     @Override
     public UserAccount selectUserAccountByUsername(String username) {

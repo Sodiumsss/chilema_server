@@ -61,7 +61,6 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public R selectFoodById(Long id)
     {
-        log.info(String.valueOf(foodMapper.selectById(id)));
         return R.success(foodMapper.selectById(id));
     }
 
