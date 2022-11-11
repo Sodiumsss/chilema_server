@@ -125,7 +125,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         try
         {
             String json =redisUtils.get(COOKIE_NAME_TOKEN+"::"+token);
-            log.info(token+"请求到用户JSON");
             UserAccount redisAccount= JSON.parseObject(json,UserAccount.class);
             redisAccount.clearSensitiveness();
             return R.success(redisAccount);//清除敏感信息后返回R，但redis中保留所有信息
