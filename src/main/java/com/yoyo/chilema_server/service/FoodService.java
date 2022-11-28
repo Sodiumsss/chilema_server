@@ -12,4 +12,5 @@ public interface FoodService {
     R selectFoodById(Long id);
     R selectFoodListByName(String name);
     R uploadImg(MultipartFile file);
+    R uploadTimingImg(MultipartFile file);
 }

@@ -87,7 +87,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         queryWrapper.eq("username",username);
         try {
-            UserAccount saved = userAccountMapper.selectOne(queryWrapper);//从数据库中拿到与用户名对应的用户列，为空直接抛异常
+            UserAccount saved = userAccountMapper.selectOne(queryWrapper);//从数据库中拿到与用户名对应的用户行，为空直接抛异常
             if (userAccount.getPassword().equals(saved.getPassword()))
             {
                 String token=UUID.randomUUID().toString().replace("-","");//生成唯一token
