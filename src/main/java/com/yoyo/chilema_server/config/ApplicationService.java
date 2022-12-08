@@ -1,12 +1,9 @@
 package com.yoyo.chilema_server.config;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yoyo.chilema_server.mapper.HollowReplyMapper;
 import com.yoyo.chilema_server.mapper.HollowThreadMapper;
 import com.yoyo.chilema_server.pojo.HollowReply;
-import com.yoyo.chilema_server.pojo.HollowThread;
 import com.yoyo.chilema_server.pojo.noSQL.MyData;
-import com.yoyo.chilema_server.service.HollowThreadService;
 import com.yoyo.chilema_server.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
